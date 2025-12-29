@@ -1,7 +1,9 @@
 #pragma once
 
 #include <stdint.h>
+#include <windows.h>
 #include <string>
+#include <vector>
 
 enum _signature_list {
 	S_DEVICE,
@@ -24,7 +26,11 @@ struct sig {
 	sig_t get_sig(_signature_list index);
 
 private:
+	DWORD get_module_size(const HMODULE mod);
+	std::vector<int> pattern_to_bytes(const char* signature);
 	sig_t scan_sig(const std::string& module_name, const std::string& signature);
+
+private:
 	sig_t m_signatures[maxSignatures];
 };
 

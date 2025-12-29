@@ -195,7 +195,7 @@ void ui::setup()
 		add_bool(L"Jump", V_TRIGGERBOT_JUMP_CHECK, true);
 
 		add_bool(L"Head", V_TRIGGERBOT_HITBOX_HEAD);
-		add_bool(L"Body", V_TRIGGERBOT_HITBOX_HEAD);
+		add_bool(L"Body", V_TRIGGERBOT_HITBOX_BODY);
 		add_bool(L"Arms", V_TRIGGERBOT_HITBOX_ARMS);
 		add_bool(L"Legs", V_TRIGGERBOT_HITBOX_LEGS);
 		break;

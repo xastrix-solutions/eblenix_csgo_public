@@ -22,57 +22,71 @@ sig_t sig::get_sig(_signature_list index)
 	return m_signatures[index];
 }
 
+DWORD sig::get_module_size(const HMODULE mod)
+{
+	const auto dos_header = reinterpret_cast<PIMAGE_DOS_HEADER>(mod);
+
+	if (!dos_header || dos_header->e_magic != IMAGE_DOS_SIGNATURE)
+		return 0L;
+
+	const auto nt_header = reinterpret_cast<PIMAGE_NT_HEADERS>(mod + dos_header->e_lfanew);
+
+	if (!nt_header || nt_header->Signature != IMAGE_NT_SIGNATURE)
+		return 0L;
+
+	return nt_header->OptionalHeader.SizeOfImage;
+}
+
+std::vector<int> sig::pattern_to_bytes(const char* signature)
+{
+	std::vector<int> bytes{};
+
+	auto start = const_cast<char*>(signature);
+	for (auto c = start; c < start + strlen(signature); c++)
+	{
+		if (*c == '?') {
+			c++;
+
+			if (*c == '?')
+				c++;
+
+			bytes.push_back(-1);
+		}
+		else {
+			bytes.push_back(std::strtoul(c, &c, 16));
+		}
+	}
+
+	return bytes;
+}
+
 sig_t sig::scan_sig(const std::string& module_name, const std::string& signature)
 {
-	const auto handle = GetModuleHandleA(module_name.c_str());
+	const auto mod = GetModuleHandleA(module_name.c_str());
 
-	if (!handle)
+	if (!mod)
 		return {};
 
-	const auto dos_header = reinterpret_cast<PIMAGE_DOS_HEADER>(handle);
-	const auto nt_headers = reinterpret_cast<PIMAGE_NT_HEADERS>(reinterpret_cast<uint8_t*>(handle) + dos_header->e_lfanew);
+	const auto base = reinterpret_cast<uint8_t*>(mod);
+	const auto bytes = pattern_to_bytes(signature.c_str());
 
-	const auto pattern_bytes = [signature]() -> std::vector<int> {
-		std::vector<int> bytes{};
+	const auto module_size = get_module_size(mod);
 
-		auto start = const_cast<char*>(signature.c_str());
-		auto end = const_cast<char*>(signature.c_str()) + signature.size();
+	const auto pattern_data = bytes.data();
+	const auto pattern_size = bytes.size();
 
-		for (auto current = start; current < end; ++current) {
-			if (*current == '?') {
-				++current;
-
-				if (*current == '?')
-					++current;
-
-				bytes.push_back(-1);
-			}
-			else {
-				bytes.push_back(std::strtoul(current, &current, 16));
-			}
-		}
-		return bytes;
-	}();
-
-	const auto scan_bytes = reinterpret_cast<uint8_t*>(handle);
-
-	const auto sz = pattern_bytes.size();
-	const auto bl = pattern_bytes.data();
-
-	const auto sz_img = nt_headers->OptionalHeader.SizeOfImage;
-
-	for (int i = 0; i < sz_img - sz; i++) {
+	for (int i = 0; i < module_size - pattern_size; i++) {
 		auto found = true;
 
-		for (auto j = 0; j < sz; ++j) {
-			if (scan_bytes[i + j] != bl[j] && bl[j] != -1) {
+		for (auto j = 0; j < pattern_size; ++j) {
+			if (base[i + j] != pattern_data[j] && pattern_data[j] != -1) {
 				found = false;
 				break;
 			}
 		}
 
 		if (found)
-			return &scan_bytes[i];
+			return &base[i];
 	}
 
 #ifdef _DEBUG
