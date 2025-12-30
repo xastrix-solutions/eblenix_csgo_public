@@ -488,7 +488,7 @@ private:
 			sssubm_entry[i].m_float_max = 0.0f;
 			sssubm_entry[i].m_float_step = 0.0f;
 
-			ssubm_entry[i].m_state = UI_NONE_STATE;
+			sssubm_entry[i].m_state = UI_NONE_STATE;
 
 			sssubm_entry[i].m_items.clear();
 			sssubm_entry[i].m_fn = []() {};

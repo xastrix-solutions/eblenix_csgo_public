@@ -257,16 +257,6 @@ void ui::setup()
 			add_sub_int(L"Weapon B", V_ESP_WEAPON_COL_B, 0, 255, 1);
 		});
 
-		add_entry<ESP_WEAPON_TAB>(s_entry_position, [&]() {
-			add_sub_bool(L"Enable", V_ESP_WEAPON_ENABLED, true);
-
-			add_sub_item(L"Weapon Type", V_ESP_WEAPON_TYPE, { L"Text", L"Icon" }, true);
-
-			add_sub_int(L"Weapon R", V_ESP_WEAPON_COL_R, 0, 255, 1);
-			add_sub_int(L"Weapon G", V_ESP_WEAPON_COL_G, 0, 255, 1);
-			add_sub_int(L"Weapon B", V_ESP_WEAPON_COL_B, 0, 255, 1);
-		});
-
 		add_entry<ESP_SKELETON_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_SKELETON_ENABLED, true);
 
@@ -1046,15 +1036,25 @@ void ui::draw(int x, int y)
 		g_render.draw_string(ss, x - string_width - 20, y - 11, font, TEXT_OUTLINE, color);
 	};
 
-	auto draw_bool = [](bool value, int x, int y, color_t color) {
+	int idx{ 0 };
+	auto draw_bool = [&](bool value, int x, int y, color_t color) {
+		static std::vector<float> min_x{},
+                                  max_x{},
+                                  am{};
+
+		if (idx >= min_x.size()) {
+			min_x.resize(idx + 1, 38.0f);
+			max_x.resize(idx + 1, 25.0f);
+			am.resize(idx + 1, 37.0f);
+		}
+
+		float switched_x = value ? max_x[idx] : min_x[idx];
+		am[idx] += (switched_x - am[idx]) * 0.1f;
+
 		g_render.draw_filled_rect(x - 38, y - 11, 26, 14, color_t(40, 40, 40));
+		g_render.draw_filled_rect(x - static_cast<int>(am[idx]), y - 10, 12, 12, color);
 
-		value ?
-			g_render.draw_filled_rect(x - 25,
-				y - 10, 12, 12, color) :
-
-			g_render.draw_filled_rect(x - 37,
-				y - 10, 12, 12, color_t(68, 68, 70));
+		++idx;
 	};
 
 	auto draw_int = [](int value, int x, int y, color_t color) {
