@@ -41,9 +41,7 @@ void esp::run()
 		float& am{ m_anim_progress[i] };
 		m_alpha[i] = am;
 
-		if (!can_draw_player(i, am, entity))
-			continue;
-
+		calc_player_animation_progress(i, am, entity);
 		player_rendering(entity);
 	}
 }
@@ -128,7 +126,7 @@ void esp::on_round_start()
 	}
 }
 
-bool esp::can_draw_player(int index, float& anim, c_base_player* entity)
+void esp::calc_player_animation_progress(int index, float& anim, c_base_player* entity)
 {
 	float rate = g_csgo.m_globals->frame_time * 1.0f / 0.5f;
 
@@ -147,11 +145,8 @@ bool esp::can_draw_player(int index, float& anim, c_base_player* entity)
 
 		if (m_anim_progress[index] <= 0.0f) {
 			m_has_seen[index] = false;
-			return false;
 		}
 	}
-
-	return true;
 }
 
 void esp::player_rendering(c_base_player* entity)

@@ -10,7 +10,7 @@ struct esp {
 	void on_create_move(i_user_cmd* cmd);
 	void on_round_start();
 private:
-	bool can_draw_player(int index, float& anim, c_base_player* entity);
+	void calc_player_animation_progress(int index, float& anim, c_base_player* entity);
 	void player_rendering(c_base_player* entity);
 
 	vec3  m_stored_pos[MAX_CLIENTS]{};

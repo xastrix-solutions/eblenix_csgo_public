@@ -426,6 +426,11 @@ private:
 		++sss_entry_size;
 	}
 
+	template <const _ui_tabs index, typename T>
+	void add_entry(int pos, T fn) {
+		if (pos == index) fn();
+	}
+
 	void draw(int x, int y);
 	void setup();
 

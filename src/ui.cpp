@@ -73,8 +73,7 @@ void ui::setup()
 	add(L"Load Settings", false);
 	add(L"Save Settings", false);
 
-	switch (m_entry_position) {
-	case AIMBOT_TAB: {
+	add_entry<AIMBOT_TAB>(m_entry_position, [&]() {
 		add_bool(L"Enable", V_AIMBOT_ENABLED, true);
 
 		add_bool(L"Silent", V_AIMBOT_SILENT);
@@ -90,15 +89,13 @@ void ui::setup()
 		add_tab(L"Weapons");
 		add_tab(L"Knifes");
 
-		switch (s_entry_position) {
-		case AIMBOT_WEAPONS_TAB: {
+		add_entry<AIMBOT_WEAPONS_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"All", V_AIMBOT_ALL_WEAPONS, true);
 
 			std::vector<std::wstring> m_hitboxes{ L"Head", L"Neck", L"Chest", L"Stomach", L"Pelvis" };
 			std::vector<std::wstring> m_types{ L"Hitbox", L"Nearest" };
 
-			switch (g_vars.get_as<bool>(V_AIMBOT_ALL_WEAPONS).value()) {
-			case true: {
+			if (g_vars.get_as<bool>(V_AIMBOT_ALL_WEAPONS).value()) {
 				add_sub_item(L"Type", V_AIMBOT_ALL_WEAPONS_TYPE, m_types, true);
 
 				if (g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_TYPE).value() == 0)
@@ -106,17 +103,16 @@ void ui::setup()
 
 				add_sub_float(L"Fov", V_AIMBOT_ALL_WEAPONS_FOV, 0.0f, 180.0f, 0.5f);
 				add_sub_float(L"Smooth", V_AIMBOT_ALL_WEAPONS_SMOOTH, 1.0f, 10.0f, 0.1f);
-				break;
 			}
-			case false: {
+			else
+			{
 				add_sub_tab(L"Pistols");
 				add_sub_tab(L"Rifles");
 				add_sub_tab(L"Snipers");
 				add_sub_tab(L"Heavies");
 				add_sub_tab(L"Smgs");
 
-				switch (ss_entry_position) {
-				case AIMBOT_WEAPONS_PISTOL_TAB: {
+				add_entry<AIMBOT_WEAPONS_PISTOL_TAB>(ss_entry_position, [&]() {
 					add_sub_sub_item(L"Type", V_AIMBOT_TYPE_PISTOL, m_types, true);
 
 					if (g_vars.get_as<int>(V_AIMBOT_TYPE_PISTOL).value() == 0)
@@ -124,9 +120,9 @@ void ui::setup()
 
 					add_sub_sub_float(L"Fov", V_AIMBOT_FOV_PISTOL, 0.0f, 180.0f, 0.5f);
 					add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_PISTOL, 1.0f, 10.0f, 0.1f);
-					break;
-				}
-				case AIMBOT_WEAPONS_RIFLE_TAB: {
+				});
+
+				add_entry<AIMBOT_WEAPONS_RIFLE_TAB>(ss_entry_position, [&]() {
 					add_sub_sub_item(L"Type", V_AIMBOT_TYPE_RIFLE, m_types, true);
 
 					if (g_vars.get_as<int>(V_AIMBOT_TYPE_RIFLE).value() == 0)
@@ -134,9 +130,9 @@ void ui::setup()
 
 					add_sub_sub_float(L"Fov", V_AIMBOT_FOV_RIFLE, 0.0f, 180.0f, 0.5f);
 					add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_RIFLE, 1.0f, 10.0f, 0.1f);
-					break;
-				}
-				case AIMBOT_WEAPONS_SNIPER_TAB: {
+				});
+
+				add_entry<AIMBOT_WEAPONS_SNIPER_TAB>(ss_entry_position, [&]() {
 					add_sub_sub_item(L"Type", V_AIMBOT_TYPE_SNIPER, m_types, true);
 
 					if (g_vars.get_as<int>(V_AIMBOT_TYPE_SNIPER).value() == 0)
@@ -144,9 +140,9 @@ void ui::setup()
 
 					add_sub_sub_float(L"Fov", V_AIMBOT_FOV_SNIPER, 0.0f, 180.0f, 0.5f);
 					add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_SNIPER, 1.0f, 10.0f, 0.1f);
-					break;
-				}
-				case AIMBOT_WEAPONS_HEAVY_TAB: {
+				});
+
+				add_entry<AIMBOT_WEAPONS_HEAVY_TAB>(ss_entry_position, [&]() {
 					add_sub_sub_item(L"Type", V_AIMBOT_TYPE_HEAVY, m_types, true);
 
 					if (g_vars.get_as<int>(V_AIMBOT_TYPE_HEAVY).value() == 0)
@@ -154,9 +150,9 @@ void ui::setup()
 
 					add_sub_sub_float(L"Fov", V_AIMBOT_FOV_HEAVY, 0.0f, 180.0f, 0.5f);
 					add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_HEAVY, 1.0f, 10.0f, 0.1f);
-					break;
-				}
-				case AIMBOT_WEAPONS_SMG_TAB: {
+				});
+
+				add_entry<AIMBOT_WEAPONS_SMG_TAB>(ss_entry_position, [&]() {
 					add_sub_sub_item(L"Type", V_AIMBOT_TYPE_SMG, m_types, true);
 
 					if (g_vars.get_as<int>(V_AIMBOT_TYPE_SMG).value() == 0)
@@ -164,15 +160,11 @@ void ui::setup()
 
 					add_sub_sub_float(L"Fov", V_AIMBOT_FOV_SMG, 0.0f, 180.0f, 0.5f);
 					add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_SMG, 1.0f, 10.0f, 0.1f);
-					break;
-				}
-				}
-				break;
+				});
 			}
-			}
-			break;
-		}
-		case AIMBOT_KNIFE_TAB: {
+		});
+
+		add_entry<AIMBOT_KNIFE_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_KNIFEBOT_ENABLED, true);
 
 			add_sub_bool(L"Team", V_KNIFEBOT_TEAMMATE_CHECK);
@@ -180,12 +172,10 @@ void ui::setup()
 			add_sub_bool(L"Flash", V_KNIFEBOT_FLASH_CHECK, true);
 
 			add_sub_float(L"Distance", V_KNIFEBOT_DISTANCE, 40.0f, 80.0f, 0.5f);
-			break;
-		}
-		}
-		break;
-	}
-	case TRIGGERBOT_TAB: {
+		});
+	});
+
+	add_entry<TRIGGERBOT_TAB>(m_entry_position, [&]() {
 		add_bool(L"Enable", V_TRIGGERBOT_ENABLED, true);
 
 		add_bool(L"Team", V_TRIGGERBOT_TEAMMATE_CHECK);
@@ -198,9 +188,9 @@ void ui::setup()
 		add_bool(L"Body", V_TRIGGERBOT_HITBOX_BODY);
 		add_bool(L"Arms", V_TRIGGERBOT_HITBOX_ARMS);
 		add_bool(L"Legs", V_TRIGGERBOT_HITBOX_LEGS);
-		break;
-	}
-	case ESP_TAB: {
+	});
+
+	add_entry<ESP_TAB>(m_entry_position, [&]() {
 		add_bool(L"Enable", V_ESP_ENABLED, true);
 
 		add_bool(L"Team", V_ESP_TEAM);
@@ -221,8 +211,7 @@ void ui::setup()
 
 		add_tab(L"Flags");
 
-		switch (s_entry_position) {
-		case ESP_NAME_TAB: {
+		add_entry<ESP_NAME_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_NAME_ENABLED, true);
 
 			add_sub_item(L"Name Type", V_ESP_NAME_TYPE, { L"Default", L"Lower", L"Upper" }, true);
@@ -230,9 +219,9 @@ void ui::setup()
 			add_sub_int(L"Name R", V_ESP_NAME_COL_R, 0, 255, 1);
 			add_sub_int(L"Name G", V_ESP_NAME_COL_G, 0, 255, 1);
 			add_sub_int(L"Name B", V_ESP_NAME_COL_B, 0, 255, 1);
-			break;
-		}
-		case ESP_BOX_TAB: {
+		});
+
+		add_entry<ESP_BOX_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_BOX_ENABLED, true);
 
 			add_sub_item(L"Box Type", V_ESP_BOX_TYPE,
@@ -241,26 +230,24 @@ void ui::setup()
 			add_sub_int(L"Box R", V_ESP_BOX_COL_R, 0, 255, 1);
 			add_sub_int(L"Box G", V_ESP_BOX_COL_G, 0, 255, 1);
 			add_sub_int(L"Box B", V_ESP_BOX_COL_B, 0, 255, 1);
-			break;
-		}
-		case ESP_HEALTH_TAB: {
+		});
+
+		add_entry<ESP_HEALTH_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_HEALTH_ENABLED, true);
 
 			add_sub_item(L"Health Type", V_ESP_HEALTH_TYPE, { L"Default", L"Health Based" }, true);
 
-			switch (g_vars.get_as<int>(V_ESP_HEALTH_TYPE).value()) {
-			case 0: {
+			if (g_vars.get_as<int>(V_ESP_HEALTH_TYPE).value() == 0)
+			{
 				add_sub_int(L"Health R", V_ESP_HEALTH_COL_R, 0, 255, 1);
 				add_sub_int(L"Health G", V_ESP_HEALTH_COL_G, 0, 255, 1);
 				add_sub_int(L"Health B", V_ESP_HEALTH_COL_B, 0, 255, 1, true);
-				break;
-			}
 			}
 
 			add_sub_bool(L"Health Battery", V_ESP_HEALTH_BATTERY);
-			break;
-		}
-		case ESP_WEAPON_TAB: {
+		});
+
+		add_entry<ESP_WEAPON_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_WEAPON_ENABLED, true);
 
 			add_sub_item(L"Weapon Type", V_ESP_WEAPON_TYPE, { L"Text", L"Icon" }, true);
@@ -268,9 +255,19 @@ void ui::setup()
 			add_sub_int(L"Weapon R", V_ESP_WEAPON_COL_R, 0, 255, 1);
 			add_sub_int(L"Weapon G", V_ESP_WEAPON_COL_G, 0, 255, 1);
 			add_sub_int(L"Weapon B", V_ESP_WEAPON_COL_B, 0, 255, 1);
-			break;
-		}
-		case ESP_SKELETON_TAB: {
+		});
+
+		add_entry<ESP_WEAPON_TAB>(s_entry_position, [&]() {
+			add_sub_bool(L"Enable", V_ESP_WEAPON_ENABLED, true);
+
+			add_sub_item(L"Weapon Type", V_ESP_WEAPON_TYPE, { L"Text", L"Icon" }, true);
+
+			add_sub_int(L"Weapon R", V_ESP_WEAPON_COL_R, 0, 255, 1);
+			add_sub_int(L"Weapon G", V_ESP_WEAPON_COL_G, 0, 255, 1);
+			add_sub_int(L"Weapon B", V_ESP_WEAPON_COL_B, 0, 255, 1);
+		});
+
+		add_entry<ESP_SKELETON_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_SKELETON_ENABLED, true);
 
 			add_sub_item(L"Skeleton Type", V_ESP_SKELETON_TYPE, { L"Default", L"Health Based" }, true);
@@ -278,25 +275,25 @@ void ui::setup()
 			add_sub_int(L"Skeleton R", V_ESP_SKELETON_COL_R, 0, 255, 1);
 			add_sub_int(L"Skeleton G", V_ESP_SKELETON_COL_G, 0, 255, 1);
 			add_sub_int(L"Skeleton B", V_ESP_SKELETON_COL_B, 0, 255, 1);
-			break;
-		}
-		case ESP_ARMOR_TAB: {
+		});
+
+		add_entry<ESP_ARMOR_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_ARMOR_ENABLED, true);
 
 			add_sub_int(L"Armor R", V_ESP_ARMOR_COL_R, 0, 255, 1);
 			add_sub_int(L"Armor G", V_ESP_ARMOR_COL_G, 0, 255, 1);
 			add_sub_int(L"Armor B", V_ESP_ARMOR_COL_B, 0, 255, 1);
-			break;
-		}
-		case ESP_BARREL_TAB: {
+		});
+
+		add_entry<ESP_BARREL_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_BARREL_ENABLED, true);
 
 			add_sub_int(L"Barrel R", V_ESP_BARREL_COL_R, 0, 255, 1);
 			add_sub_int(L"Barrel G", V_ESP_BARREL_COL_G, 0, 255, 1);
 			add_sub_int(L"Barrel B", V_ESP_BARREL_COL_B, 0, 255, 1);
-			break;
-		}
-		case ESP_CROSSHAIR_TAB: {
+		});
+
+		add_entry<ESP_CROSSHAIR_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_CROSSHAIR_ENABLED, true);
 
 			add_sub_float(L"Crosshair Fov", V_ESP_CROSSHAIR_FOV, 1.0f, 2.0f, 0.1f, true);
@@ -308,17 +305,17 @@ void ui::setup()
 			add_sub_int(L"Crosshair On Target R", V_ESP_CROSSHAIR_COL_ON_TARGET_R, 0, 255, 1);
 			add_sub_int(L"Crosshair On Target G", V_ESP_CROSSHAIR_COL_ON_TARGET_G, 0, 255, 1);
 			add_sub_int(L"Crosshair On Target B", V_ESP_CROSSHAIR_COL_ON_TARGET_B, 0, 255, 1);
-			break;
-		}
-		case ESP_SNAP_LINES_TAB: {
+		});
+
+		add_entry<ESP_SNAP_LINES_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_SNAP_LINES_ENABLED, true);
 
 			add_sub_int(L"Snap Lines R", V_ESP_SNAP_LINES_COL_R, 0, 255, 1);
 			add_sub_int(L"Snap Lines G", V_ESP_SNAP_LINES_COL_G, 0, 255, 1);
 			add_sub_int(L"Snap Lines B", V_ESP_SNAP_LINES_COL_B, 0, 255, 1);
-			break;
-		}
-		case ESP_FLAGS_TAB: {
+		});
+
+		add_entry<ESP_FLAGS_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_FLAGS_ENABLED, true);
 
 			add_sub_bool(L"HK", V_ESP_FLAGS_HK);
@@ -336,43 +333,36 @@ void ui::setup()
 
 			add_sub_tab(L"Inventory Items");
 
-			switch (ss_entry_position) {
-			case ESP_FLAGS_INVENTORY_ITEMS_TAB: {
+			add_entry<ESP_FLAGS_INVENTORY_ITEMS_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_bool(L"Enable", V_ESP_FLAGS_ITEMS_ENABLED, true);
 
 				add_sub_sub_int(L"Inventory Items R", V_ESP_FLAGS_ITEMS_COL_R, 0, 255, 1);
 				add_sub_sub_int(L"Inventory Items G", V_ESP_FLAGS_ITEMS_COL_G, 0, 255, 1);
 				add_sub_sub_int(L"Inventory Items B", V_ESP_FLAGS_ITEMS_COL_B, 0, 255, 1);
-				break;
-			}
-			}
-			break;
-		}
-		}
-		break;
-	}
-	case VISUALS_TAB: {
+			});
+		});
+	});
+
+	add_entry<VISUALS_TAB>(m_entry_position, [&]() {
 		add_bool(L"Enable", V_VISUALS_ENABLED, true);
 
 		add_tab(L"Interface");
 		add_tab(L"World");
 		add_tab(L"Removals");
 
-		switch (s_entry_position) {
-		case VISUALS_INTERFACE_TAB: {
+		add_entry<VISUALS_INTERFACE_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Draw Status", V_VISUALS_INTERFACE_STATUS);
 			add_sub_bool(L"Draw Spectators", V_VISUALS_INTERFACE_SPECTATORS);
-			break;
-		}
-		case VISUALS_WORLD_TAB: {
+		});
+
+		add_entry<VISUALS_WORLD_TAB>(s_entry_position, [&]() {
 			add_sub_tab(L"Items");
 			add_sub_tab(L"Grenades (In use)");
 			add_sub_tab(L"Weapons");
 			add_sub_tab(L"Bomb (Planted)");
 			add_sub_tab(L"Nightmode");
 
-			switch (ss_entry_position) {
-			case VISUALS_WORLD_ITEMS_TAB: {
+			add_entry<VISUALS_WORLD_ITEMS_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_bool(L"Enable", V_VISUALS_WORLD_ITEMS_ENABLED, true);
 
 				add_sub_sub_bool(L"Items Distance", V_VISUALS_WORLD_ITEMS_DISTANCE, true);
@@ -380,9 +370,9 @@ void ui::setup()
 				add_sub_sub_int(L"Items R", V_VISUALS_WORLD_ITEMS_COL_R, 0, 255, 1);
 				add_sub_sub_int(L"Items G", V_VISUALS_WORLD_ITEMS_COL_G, 0, 255, 1);
 				add_sub_sub_int(L"Items B", V_VISUALS_WORLD_ITEMS_COL_B, 0, 255, 1);
-				break;
-			}
-			case VISUALS_WORLD_GRENADES_TAB: {
+			});
+
+			add_entry<VISUALS_WORLD_GRENADES_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_bool(L"Enable", V_VISUALS_WORLD_PROJECTLINES_ENABLED, true);
 
 				add_sub_sub_item(L"Grenades Type", V_VISUALS_WORLD_PROJECTLINES_TYPE, { L"Text", L"Icon" }, true);
@@ -392,9 +382,9 @@ void ui::setup()
 				add_sub_sub_int(L"Grenades R", V_VISUALS_WORLD_PROJECTLINES_COL_R, 0, 255, 1);
 				add_sub_sub_int(L"Grenades G", V_VISUALS_WORLD_PROJECTLINES_COL_G, 0, 255, 1);
 				add_sub_sub_int(L"Grenades B", V_VISUALS_WORLD_PROJECTLINES_COL_B, 0, 255, 1);
-				break;
-			}
-			case VISUALS_WORLD_WEAPONS_TAB: {
+			});
+
+			add_entry<VISUALS_WORLD_WEAPONS_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_bool(L"Enable", V_VISUALS_WORLD_WEAPONS_ENABLED, true);
 
 				add_sub_sub_item(L"Weapons Type", V_VISUALS_WORLD_WEAPONS_TYPE, { L"Text", L"Icon" }, true);
@@ -409,9 +399,9 @@ void ui::setup()
 				add_sub_sub_int(L"Weapons Ammo Bar R", V_VISUALS_WORLD_WEAPONS_AMMO_BAR_COL_R, 0, 255, 1);
 				add_sub_sub_int(L"Weapons Ammo Bar G", V_VISUALS_WORLD_WEAPONS_AMMO_BAR_COL_G, 0, 255, 1);
 				add_sub_sub_int(L"Weapons Ammo Bar B", V_VISUALS_WORLD_WEAPONS_AMMO_BAR_COL_B, 0, 255, 1);
-				break;
-			}
-			case VISUALS_WORLD_BOMB_TAB: {
+			});
+
+			add_entry<VISUALS_WORLD_BOMB_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_bool(L"Enable", V_VISUALS_WORLD_C4_ENABLED, true);
 
 				add_sub_sub_item(L"Bomb Type", V_VISUALS_WORLD_C4_TYPE, { L"Text", L"Icon" }, true);
@@ -431,9 +421,9 @@ void ui::setup()
 				add_sub_sub_int(L"Bomb Defuse Bar R", V_VISUALS_WORLD_C4_COL_DEFUSE_BAR_R, 0, 255, 1);
 				add_sub_sub_int(L"Bomb Defuse Bar G", V_VISUALS_WORLD_C4_COL_DEFUSE_BAR_G, 0, 255, 1);
 				add_sub_sub_int(L"Bomb Defuse Bar B", V_VISUALS_WORLD_C4_COL_DEFUSE_BAR_B, 0, 255, 1);
-				break;
-			}
-			case VISUALS_WORLD_NIGHTMODE_TAB: {
+			});
+
+			add_entry<VISUALS_WORLD_NIGHTMODE_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_bool(L"Enable", V_VISUALS_WORLD_NIGHTMODE_ENABLED, true);
 
 				add_sub_sub_float(L"World Brightness", V_VISUALS_WORLD_NIGHTMODE_WORLD_BRIGHTNESS, 0.1f, 1.0f, 0.01f);
@@ -445,30 +435,25 @@ void ui::setup()
 				add_sub_sub_function(L"Apply Changes", []() {
 					GLOBAL(visuals_nightmode_state) = false;
 				});
-				break;
-			}
-			}
-			break;
-		}
-		case VISUALS_REMOVALS_TAB: {
+			});
+		});
+
+		add_entry<VISUALS_REMOVALS_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Smoke", V_VISUALS_REMOVALS_SMOKE);
 			add_sub_bool(L"Flash", V_VISUALS_REMOVALS_FLASH);
 			add_sub_bool(L"Hands", V_VISUALS_REMOVALS_HANDS);
 			add_sub_bool(L"Sleeves", V_VISUALS_REMOVALS_SLEEVES);
 			add_sub_bool(L"Scope", V_VISUALS_REMOVALS_SCOPE);
-			break;
-		}
-		}
-		break;
-	}
-	case ESSENTIALS_TAB: {
+		});
+	});
+
+	add_entry<ESSENTIALS_TAB>(m_entry_position, [&]() {
 		add_tab(L"Visual");
 		add_tab(L"Movement");
 		add_tab(L"Event Logs");
 		add_tab(L"Menu", true);
 
-		switch (s_entry_position) {
-		case ESSENTIALS_VISUAL_TAB: {
+		add_entry<ESSENTIALS_VISUAL_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Radar", V_MISC_VISUAL_ENGINE_RADAR);
 			add_sub_bool(L"Inventory Unlock", V_MISC_VISUAL_INVENTORY_UNLOCK);
 			add_sub_bool(L"Reveal Ranks", V_MISC_VISUAL_REVEAL_RANKS, true);
@@ -480,20 +465,20 @@ void ui::setup()
 
 			add_sub_bool(L"Thirdperson", V_MISC_VISUAL_THIRDPERSON);
 			add_sub_float(L"Thirdperson Fov", V_MISC_VISUAL_THIRDPERSON_FOV, 20.0f, 90.0f, 1.0f);
-			break;
-		}
-		case ESSENTIALS_MOVEMENT_TAB: {
+		});
+
+		add_entry<ESSENTIALS_MOVEMENT_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Bunnyhop", V_MISC_MOVEMENT_BUNNYHOP);
 			add_sub_bool(L"Infinite Duck", V_MISC_MOVEMENT_INFINITE_DUCK);
 			add_sub_bool(L"Autostrafe", V_MISC_MOVEMENT_AUTO_STRAFE);
-			break;
-		}
-		case ESSENTIALS_EVENT_LOGS_TAB: {
+		});
+
+		add_entry<ESSENTIALS_EVENT_LOGS_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Player Hurt", V_MISC_EVENT_LOGS_PLAYER_HURT);
 			add_sub_bool(L"Player Purchase", V_MISC_EVENT_LOGS_PLAYER_PURCHASE);
-			break;
-		}
-		case ESSENTIALS_MENU_TAB: {
+		});
+
+		add_entry<ESSENTIALS_MENU_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Mouse Wheel Navigation", V_UI_MOUSE_WHEEL_NAVIGATION, true);
 
 			add_sub_int(L"Position X", V_UI_POS_X, 0, 500, 1);
@@ -504,16 +489,10 @@ void ui::setup()
 			add_sub_int(L"Menu B", V_UI_COL_B, 0, 255, 1, true);
 
 			add_sub_int(L"Menu A", V_UI_COL_A, 70, 170, 1);
-			break;
-		}
-		}
-
-		add_function(L"Unload", []() {
-			g::Unload();
 		});
-		break;
-	}
-	case GLOW_TAB: {
+	});
+
+	add_entry<GLOW_TAB>(m_entry_position, [&]() {
 		add_bool(L"Enable", V_GLOW_ENABLED, true);
 
 		add_bool(L"Team", V_GLOW_TEAM);
@@ -524,47 +503,40 @@ void ui::setup()
 
 		add_tab(L"Color");
 
-		switch (s_entry_position) {
-		case GLOW_COLOR_TAB: {
+		add_entry<GLOW_COLOR_TAB>(s_entry_position, [&]() {
 			add_sub_tab(L"Enemy");
 			add_sub_tab(L"Team");
 			add_sub_tab(L"C4", true);
 
-			switch (ss_entry_position) {
-			case GLOW_COLOR_ENEMY_TAB: {
+			add_entry<GLOW_COLOR_ENEMY_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_int(L"Enemy R", V_GLOW_ENEMY_COL_R, 0, 255, 1);
 				add_sub_sub_int(L"Enemy G", V_GLOW_ENEMY_COL_G, 0, 255, 1);
 				add_sub_sub_int(L"Enemy B", V_GLOW_ENEMY_COL_B, 0, 255, 1, true);
 
 				add_sub_sub_int(L"Enemy A", V_GLOW_ENEMY_COL_A, 130, 255, 1);
-				break;
-			}
-			case GLOW_COLOR_TEAM_TAB: {
+			});
+
+			add_entry<GLOW_COLOR_TEAM_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_int(L"Team R", V_GLOW_TEAM_COL_R, 0, 255, 1);
 				add_sub_sub_int(L"Team G", V_GLOW_TEAM_COL_G, 0, 255, 1);
 				add_sub_sub_int(L"Team B", V_GLOW_TEAM_COL_B, 0, 255, 1, true);
 
 				add_sub_sub_int(L"Team A", V_GLOW_TEAM_COL_A, 130, 255, 1);
-				break;
-			}
-			case GLOW_COLOR_C4_TAB: {
+			});
+
+			add_entry<GLOW_COLOR_C4_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_int(L"C4 R", V_GLOW_C4_COL_R, 0, 255, 1);
 				add_sub_sub_int(L"C4 G", V_GLOW_C4_COL_G, 0, 255, 1);
 				add_sub_sub_int(L"C4 B", V_GLOW_C4_COL_B, 0, 255, 1, true);
 
 				add_sub_sub_int(L"C4 A", V_GLOW_C4_COL_A, 130, 255, 1);
-				break;
-			}
-			}
+			});
 
 			add_sub_bool(L"Health Based", V_GLOW_HEALTH_BASED);
-			break;
-		}
-		}
+		});
+	});
 
-		break;
-	}
-	case CHAMS_TAB: {
+	add_entry<CHAMS_TAB>(m_entry_position, [&]() {
 		add_bool(L"Enable", V_CHAMS_ENABLED, true);
 
 		add_bool(L"Team", V_CHAMS_TEAM);
@@ -578,67 +550,56 @@ void ui::setup()
 		add_int(L"Chams B", V_CHAMS_COL_B, 0, 255, 1, true);
 
 		add_bool(L"Health Based", V_CHAMS_HEALTH_BASED);
-		break;
-	}
-	case KEYS_TAB: {
+	});
+
+	add_entry<KEYS_TAB>(m_entry_position, [&]() {
 		add_tab(L"On Toggle");
 		add_tab(L"On Hold");
 
-		switch (s_entry_position) {
-		case KEYS_ON_TOGGLE_TAB: {
+		add_entry<KEYS_ON_TOGGLE_TAB>(s_entry_position, [&]() {
 			add_sub_tab(L"Aim");
 			add_sub_tab(L"Misc");
 			add_sub_tab(L"Other");
 
-			switch (ss_entry_position) {
-			case KEYS_ON_TOGGLE_AIM_TAB: {
+			add_entry<KEYS_ON_TOGGLE_AIM_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_key(L"Aimbot", V_KEYS_ON_TOGGLE_AIMBOT);
 				add_sub_sub_key(L"Trigger", V_KEYS_ON_TOGGLE_TRIGGERBOT);
-				break;
-			}
-			case KEYS_ON_TOGGLE_MISC_TAB: {
+			});
+
+			add_entry<KEYS_ON_TOGGLE_MISC_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_key(L"Thirdperson", V_KEYS_ON_TOGGLE_THIRDPERSON);
-				break;
-			}
-			case KEYS_ON_TOGGLE_OTHER_TAB: {
+			});
+
+			add_entry<KEYS_ON_TOGGLE_OTHER_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_key(L"Menu", V_KEYS_ON_TOGGLE_UI);
 				add_sub_sub_key(L"Panic", V_KEYS_ON_TOGGLE_PANIC);
-				break;
-			}
-			}
-			break;
-		}
-		case KEYS_ON_HOLD_TAB: {
+			});
+		});
+
+		add_entry<KEYS_ON_HOLD_TAB>(s_entry_position, [&]() {
 			add_sub_tab(L"Misc");
 
-			switch (ss_entry_position) {
-			case KEYS_ON_HOLD_MISC_TAB: {
+			add_entry<KEYS_ON_HOLD_MISC_TAB>(ss_entry_position, [&]() {
 				add_sub_sub_key(L"Blockbot", V_KEYS_ON_HOLD_BLOCKBOT);
-				break;
-			}
-			}
-			break;
-		}
-		}
-		break;
-	}
-	case LOAD_SETTINGS_TAB: {
+			});
+		});
+	});
+
+	add_entry<LOAD_SETTINGS_TAB>(m_entry_position, [&]() {
 		for (const auto& cfg : cfg_list) {
 			add_function(cfg, [cfg]() {
 				config_manager::load_config(cfg);
 			});
 		}
-		break;
-	}
-	case SAVE_SETTINGS_TAB: {
+	});
+
+	add_entry<SAVE_SETTINGS_TAB>(m_entry_position, [&]() {
 		for (const auto& cfg : cfg_list) {
 			add_function(cfg, [cfg]() {
 				config_manager::save_config(cfg);
 			});
 		}
-		break;
-	}
-	}
+	});
 }
 
 void ui::handle_toggle_keys(unsigned int k)
