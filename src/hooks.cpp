@@ -19,8 +19,6 @@ static bool __stdcall create_move_h(float input_sample_frametime, i_user_cmd* cm
 			g_triggerbot.run(cmd);
 			g_knifebot.run(cmd);
 
-			g_esp.on_create_move(cmd);
-
 			if (g_csgo.m_engine->is_connected())
 			{
 				if (g_vars.get_as<bool>(V_MISC_VISUAL_REVEAL_RANKS).value())
@@ -557,6 +555,50 @@ static bool __fastcall sv_cheats_boolean_h(convar* convar, int)
 	return o_sv_cheats_boolean(convar);
 }
 
+static void(__thiscall *o_draw_set_color)(c_surface_draw_manager*, int, int, int, int);
+static void __stdcall draw_set_color_h(int r, int g, int b, int a)
+{
+	if (GLOBAL(initialised) && !GLOBAL(panic))
+	{
+		if (g_vars.get_as<bool>(V_ESP_ENABLED).value() && g_vars.get_as<bool>(V_ESP_CROSSHAIR_ENABLED).value())
+		{
+			if (g_csgo.m_engine->is_connected())
+			{
+				if (_ReturnAddress() == g_sig.get_sig(S_CROSSHAIR_COLOR))
+				{
+					if (g_csgo.get_local() && g_csgo.get_local()->is_life_state())
+					{
+						for (int i = 1; i <= g_csgo.m_globals->max_clients; i++)
+						{
+							auto entity = reinterpret_cast<c_base_player*>(g_csgo.m_entity_list->get_client_entity(i));
+
+							if (!entity || entity->get_dormant() || !entity->is_life_state() || entity == g_csgo.get_local())
+								continue;
+
+							vec2 center{ static_cast<float>(GLOBAL(screen_width)) / 2, static_cast<float>(GLOBAL(screen_height)) / 2 };
+							box bbox{ g_esp.get_player_bbox(entity) };
+
+							if ((center.x >= bbox.x && center.x <= bbox.x + bbox.w &&
+								center.y >= bbox.y && center.y <= bbox.y + bbox.h))
+							{
+								color_t on_target_col{ V_ESP_CROSSHAIR_COL };
+
+								return o_draw_set_color(g_csgo.m_surface,
+									on_target_col.get_arr()[0],
+									on_target_col.get_arr()[1],
+									on_target_col.get_arr()[2],
+									a);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return o_draw_set_color(g_csgo.m_surface, r, g, b, a);
+}
+
 static void(__fastcall *o_shutdown)(void*, void*);
 static void __fastcall on_shutdown_h(void* _ecx, void* _edx)
 {
@@ -612,6 +654,9 @@ void hooks::init()
 
 		m_hooks[HK_SVCHEATSBOOLEAN].hook<convar*, SV_CHEATS_BOOLEAN_FN_INDEX>(g_csgo.m_cvar->get_convar("sv_cheats"),
 			sv_cheats_boolean_h, reinterpret_cast<void**>(&o_sv_cheats_boolean));
+
+		m_hooks[HK_DRAWSETCOLOR].hook<c_surface_draw_manager*, DRAW_SET_COLOR_FN_INDEX>(g_csgo.m_surface,
+			draw_set_color_h, reinterpret_cast<void**>(&o_draw_set_color));
 	}
 }
 

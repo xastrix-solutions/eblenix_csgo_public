@@ -286,15 +286,9 @@ void ui::setup()
 		add_entry<ESP_CROSSHAIR_TAB>(s_entry_position, [&]() {
 			add_sub_bool(L"Enable", V_ESP_CROSSHAIR_ENABLED, true);
 
-			add_sub_float(L"Crosshair Fov", V_ESP_CROSSHAIR_FOV, 1.0f, 2.0f, 0.1f, true);
-
-			add_sub_int(L"Crosshair No Target R", V_ESP_CROSSHAIR_COL_R, 0, 255, 1);
-			add_sub_int(L"Crosshair No Target G", V_ESP_CROSSHAIR_COL_G, 0, 255, 1);
-			add_sub_int(L"Crosshair No Target B", V_ESP_CROSSHAIR_COL_B, 0, 255, 1, true);
-
-			add_sub_int(L"Crosshair On Target R", V_ESP_CROSSHAIR_COL_ON_TARGET_R, 0, 255, 1);
-			add_sub_int(L"Crosshair On Target G", V_ESP_CROSSHAIR_COL_ON_TARGET_G, 0, 255, 1);
-			add_sub_int(L"Crosshair On Target B", V_ESP_CROSSHAIR_COL_ON_TARGET_B, 0, 255, 1);
+			add_sub_int(L"Crosshair R", V_ESP_CROSSHAIR_COL_R, 0, 255, 1);
+			add_sub_int(L"Crosshair G", V_ESP_CROSSHAIR_COL_G, 0, 255, 1);
+			add_sub_int(L"Crosshair B", V_ESP_CROSSHAIR_COL_B, 0, 255, 1);
 		});
 
 		add_entry<ESP_SNAP_LINES_TAB>(s_entry_position, [&]() {

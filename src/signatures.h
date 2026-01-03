@@ -16,6 +16,7 @@ enum _signature_list {
 	S_CAM_THINK,
 	S_IS_LOADOUTALLOWED,
 	S_LIST_LEAVES,
+	S_CROSSHAIR_COLOR,
 	maxSignatures,
 };
 

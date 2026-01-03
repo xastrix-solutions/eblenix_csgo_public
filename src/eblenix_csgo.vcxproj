@@ -110,6 +110,7 @@
     <ClCompile Include="netvar_manager.cpp" />
     <ClCompile Include="game_event_mgr.cpp" />
     <ClCompile Include="render_view.cpp" />
+    <ClCompile Include="surface.cpp" />
     <ClCompile Include="trace_ray.cpp" />
     <ClCompile Include="weapon_system.cpp" />
     <ClCompile Include="material.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="fonts.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="matrix.h" />
+    <ClInclude Include="surface.h" />
     <ClInclude Include="vars_def.h" />
     <ClInclude Include="vec2.h" />
     <ClInclude Include="vec3.h" />

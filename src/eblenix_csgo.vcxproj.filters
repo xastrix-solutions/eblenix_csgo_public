@@ -133,6 +133,9 @@
     <ClCompile Include="fonts.cpp">
       <Filter>managers\render_manager</Filter>
     </ClCompile>
+    <ClCompile Include="surface.cpp">
+      <Filter>csgo\vgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="netvar_manager.h">
@@ -332,6 +335,9 @@
     </ClInclude>
     <ClInclude Include="color.h">
       <Filter>managers\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="surface.h">
+      <Filter>csgo\vgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

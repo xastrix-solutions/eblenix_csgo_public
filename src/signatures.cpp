@@ -15,6 +15,7 @@ void sig::init()
 	m_signatures[S_CAM_THINK]               = scan_sig(GLOBAL(module_list[clientDLL]), "85 C0 75 30 38 86");
 	m_signatures[S_IS_LOADOUTALLOWED]       = scan_sig(GLOBAL(module_list[clientDLL]), "84 C0 75 04 B0 01 5F");
 	m_signatures[S_LIST_LEAVES]             = scan_sig(GLOBAL(module_list[clientDLL]), "56 52 FF 50 18") + 5;
+	m_signatures[S_CROSSHAIR_COLOR]         = scan_sig(GLOBAL(module_list[clientDLL]), "FF 50 3C 80 7D 28") + 3;
 }
 
 sig_t sig::get_sig(_signature_list index)

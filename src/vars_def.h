@@ -125,14 +125,10 @@
 #define V_ESP_BARREL_COL_B V_ESP_BARREL_COL B_COL_P
 
 #define V_ESP_CROSSHAIR_ENABLED "esp->crosshair->enabled"
-#define V_ESP_CROSSHAIR_FOV "esp->crosshair->fov"
 #define V_ESP_CROSSHAIR_COL "esp->crosshair->col"
 #define V_ESP_CROSSHAIR_COL_R V_ESP_CROSSHAIR_COL R_COL_P
 #define V_ESP_CROSSHAIR_COL_G V_ESP_CROSSHAIR_COL G_COL_P
 #define V_ESP_CROSSHAIR_COL_B V_ESP_CROSSHAIR_COL B_COL_P
-#define V_ESP_CROSSHAIR_COL_ON_TARGET_R V_ESP_CROSSHAIR_COL "->on_target" R_COL_P
-#define V_ESP_CROSSHAIR_COL_ON_TARGET_G V_ESP_CROSSHAIR_COL "->on_target" G_COL_P
-#define V_ESP_CROSSHAIR_COL_ON_TARGET_B V_ESP_CROSSHAIR_COL "->on_target" B_COL_P
 
 #define V_ESP_SNAP_LINES_ENABLED "esp->snap_lines->enabled"
 #define V_ESP_SNAP_LINES_COL "esp->snap_lines->col"

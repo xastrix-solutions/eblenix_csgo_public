@@ -28,6 +28,7 @@ enum _module_list {
 	shaderapidx9DLL,
 	vstdlibDLL,
 	vgui2DLL,
+	vguiMatSurfaceDLL,
 	materialsystemDLL,
 	serverBrowserDLL,
 	maxModules,
@@ -48,8 +49,7 @@ namespace g
 	inline int screen_width{},
 		       screen_height{};
 
-	inline std::once_flag init_render_stuff{},
-	                      update_crosshair_col{};
+	inline std::once_flag init_render_stuff{};
 
 	inline bool visuals_nightmode_state{};
 
@@ -63,6 +63,7 @@ namespace g
 		"shaderapidx9.dll",
 		"vstdlib.dll",
 		"vgui2.dll",
+		"vguimatsurface.dll",
 		"materialsystem.dll",
 		"serverbrowser.dll",
 	};

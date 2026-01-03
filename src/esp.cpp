@@ -2,7 +2,6 @@
 
 #include "globals.h"
 #include "vars.h"
-#include "helpers.h"
 #include "render_manager.h"
 #include "interfaces.h"
 #include "math.h"
@@ -46,79 +45,6 @@ void esp::run()
 	}
 }
 
-void esp::on_create_move(i_user_cmd* cmd)
-{
-	if (!g_vars.get_as<bool>(V_ESP_ENABLED).value())
-		return;
-
-	if (!g_csgo.m_engine->is_connected())
-		return;
-
-	if (!g_csgo.get_local())
-		return;
-
-	if (g_vars.get_as<bool>(V_ESP_CROSSHAIR_ENABLED).value())
-	{
-		auto cl_crosshairstyle = g_csgo.m_cvar->get_convar("cl_crosshairstyle");
-
-		auto cl_crosshaircolor = g_csgo.m_cvar->get_convar("cl_crosshaircolor");
-		auto cl_crosshaircolor_r = g_csgo.m_cvar->get_convar("cl_crosshaircolor_r");
-		auto cl_crosshaircolor_g = g_csgo.m_cvar->get_convar("cl_crosshaircolor_g");
-		auto cl_crosshaircolor_b = g_csgo.m_cvar->get_convar("cl_crosshaircolor_b");
-
-		std::call_once(GLOBAL(update_crosshair_col), [&]() {
-			g_vars.set(V_ESP_CROSSHAIR_COL_R,
-				cl_crosshaircolor_r ? cl_crosshaircolor_r->get_int() : 255);
-
-			g_vars.set(V_ESP_CROSSHAIR_COL_G,
-				cl_crosshaircolor_g ? cl_crosshaircolor_g->get_int() : 255);
-
-			g_vars.set(V_ESP_CROSSHAIR_COL_B,
-				cl_crosshaircolor_b ? cl_crosshaircolor_b->get_int() : 255);
-		});
-
-		static auto set_col = [&](std::array<int, 3> color) {
-			if (cl_crosshairstyle->get_int() == 1)
-				cl_crosshairstyle->set_value(5);
-
-			if (cl_crosshaircolor->get_int() != 5)
-				cl_crosshaircolor->set_value(5);
-
-			cl_crosshaircolor_r->set_value(color[0]);
-			cl_crosshaircolor_g->set_value(color[1]);
-			cl_crosshaircolor_b->set_value(color[2]);
-		};
-
-		if (vec3 angle; const auto target = Helpers::find_target_entity(cmd, g_vars.get_as<float>(V_ESP_CROSSHAIR_FOV).value(), angle))
-		{
-			auto entity = reinterpret_cast<c_base_player*>(g_csgo.m_entity_list->get_client_entity(target));
-
-			if (!entity || entity->get_health() <= 0 || entity == g_csgo.get_local())
-				return;
-
-			if ((entity->get_team_num() == g_csgo.get_local()->get_team_num()) & !g_vars.get_as<bool>(V_ESP_TEAM).value())
-				return;
-
-			if (!g_csgo.get_local()->can_see_entity(entity->get_eye_pos()) & g_vars.get_as<bool>(V_ESP_VISIBLE_ONLY).value())
-				return;
-
-			set_col({
-				g_vars.get_as<int>(V_ESP_CROSSHAIR_COL_ON_TARGET_R).value(),
-				g_vars.get_as<int>(V_ESP_CROSSHAIR_COL_ON_TARGET_G).value(),
-				g_vars.get_as<int>(V_ESP_CROSSHAIR_COL_ON_TARGET_B).value()
-			});
-		}
-		else
-		{
-			set_col({
-				g_vars.get_as<int>(V_ESP_CROSSHAIR_COL_R).value(),
-				g_vars.get_as<int>(V_ESP_CROSSHAIR_COL_G).value(),
-				g_vars.get_as<int>(V_ESP_CROSSHAIR_COL_B).value()
-			});
-		}
-	}
-}
-
 void esp::on_round_start()
 {
 	for (int i = 0; i <= MAX_CLIENTS; i++) {
@@ -149,11 +75,18 @@ void esp::calc_player_animation_progress(int index, float& anim, c_base_player* 
 	}
 }
 
-void esp::player_rendering(c_base_player* entity)
+box esp::get_player_bbox(c_base_player* entity)
 {
 	box bbox{};
 	if (!Helpers::get_bbox(entity, bbox, static_cast<bbox_type>(g_vars.get_as<int>(V_ESP_RENDER_TYPE).value())))
-		return;
+		return box{ 0, 0, 0, 0 };
+
+	return bbox;
+}
+
+void esp::player_rendering(c_base_player* entity)
+{
+	box bbox{ get_player_bbox(entity) };
 
 	if (g_vars.get_as<bool>(V_ESP_NAME_ENABLED).value())
 	{

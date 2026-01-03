@@ -1,14 +1,15 @@
 #pragma once
 
-#include "sdk.h"
+#include "helpers.h"
 
 #define MAX_CLIENTS 65
 #define MAX_PLAYER_RENDERING_DISTANCE 1499.0f
 
 struct esp {
 	void run();
-	void on_create_move(i_user_cmd* cmd);
+	box get_player_bbox(c_base_player* entity);
 	void on_round_start();
+
 private:
 	void calc_player_animation_progress(int index, float& anim, c_base_player* entity);
 	void player_rendering(c_base_player* entity);

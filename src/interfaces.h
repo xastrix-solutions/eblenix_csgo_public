@@ -10,6 +10,7 @@ struct interfaces {
 	c_entity_list* m_entity_list;
 	c_engine_client* m_engine;
 	c_panel* m_panel;
+	c_surface_draw_manager* m_surface;
 	c_global_vars* m_globals;
 	c_material_system* m_mat_system;
 	c_base_convars* m_cvar;

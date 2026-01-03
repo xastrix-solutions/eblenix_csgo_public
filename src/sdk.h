@@ -11,6 +11,7 @@
 #include "entity_list.h"
 #include "base_entity.h"
 #include "panel.h"
+#include "surface.h"
 #include "global_vars.h"
 #include "studio.h"
 #include "view_setup.h"

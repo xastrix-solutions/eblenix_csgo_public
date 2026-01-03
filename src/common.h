@@ -19,5 +19,6 @@ enum fn_num {
 	IS_CONNECTED_FN_INDEX                = 27,
 	LIST_IN_LEAVES_BOX_FN_INDEX          = 6,
 	SV_CHEATS_BOOLEAN_FN_INDEX           = 13,
+	DRAW_SET_COLOR_FN_INDEX              = 15,
 	SHUTDOWN_FN_INDEX                    = 4,
 };

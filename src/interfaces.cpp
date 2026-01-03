@@ -42,6 +42,15 @@ void CSGO::init()
 		return;
 	}
 
+	m_surface = Helpers::get_interface<c_surface_draw_manager>(GLOBAL(module_list[vguiMatSurfaceDLL]), VGUI_SURFACE_INTERFACE_VERSION);
+
+	if (!m_surface) {
+#ifdef _DEBUG
+		printf("Failed to create surface draw manager interface\n");
+#endif
+		return;
+	}
+
 	m_mat_system = Helpers::get_interface<c_material_system>(GLOBAL(module_list[materialsystemDLL]), MATERIAL_SYSTEM_INTERFACE_VERSION);
 
 	if (!m_mat_system) {
