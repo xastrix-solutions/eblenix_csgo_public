@@ -1,9 +1,7 @@
 #include "mod.h"
 
 #include "fonts.hpp"
-static std::vector<font_resource_t> font_list = {
-	{ 0, astriumwep_ttf, ASTRIUMWEP_TTF_SZ },
-};
+static HANDLE astriumwep_font{};
 
 void mod::init(void* I)
 {
@@ -18,7 +16,7 @@ void mod::init(void* I)
 			if (util::wait_for_module(clientDLL, clientPanoramaDLL, 200) == WM_TIMEOUT)
 				GLOBAL(state) = CS_SHUTDOWN;
 
-			g_fonts.init(font_list);
+			astriumwep_font = AddFontMemResourceEx(astriumwep_ttf, ASTRIUMWEP_TTF_SZ, NULL, 0);
 			g_vars.init();
 
 			GLOBAL(state)++;
@@ -124,7 +122,11 @@ void mod::undo()
 	g_hooks.undo();
 	g_input.undo();
 	g_vars.undo();
-	g_fonts.undo(font_list);
+
+	if (astriumwep_font) {
+		RemoveFontMemResourceEx(astriumwep_font);
+		astriumwep_font = NULL;
+	}
 }
 
 bool __stdcall DllMain(const HMODULE mod, const int32_t r, void*)

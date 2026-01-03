@@ -176,8 +176,8 @@ void esp::player_rendering(c_base_player* entity)
 		if (player_name.length() > 10)
 			player_name = player_name.substr(0, 10) + L"...";
 
-		g_render.draw_stringW(player_name, bbox.x + (bbox.w / 2), bbox.y - 14,
-			g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, color_t(V_ESP_NAME_COL, 255 * m_alpha[entity->index()]));
+		g_font.draw_stringW(player_name, bbox.x + (bbox.w / 2), bbox.y - 14,
+			g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, color_t(V_ESP_NAME_COL, 255 * m_alpha[entity->index()]));
 	}
 
 	const auto background_col = color_t(3, 3, 3, 255 * m_alpha[entity->index()]);
@@ -278,16 +278,16 @@ void esp::player_rendering(c_base_player* entity)
 				if (g_vars.get_as<bool>(V_ESP_ARMOR_ENABLED).value() && armor_val > m_armor_min)
 					offset += 3;
 
-				g_render.draw_string(Helpers::get_weapon_type_by_index(weapon->item_definition_index(), we_text),
-					bbox.x + (bbox.w / 2), bbox.h + bbox.y + offset, g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+				g_font.draw_string(Helpers::get_weapon_type_by_index(weapon->item_definition_index(), we_text),
+					bbox.x + (bbox.w / 2), bbox.h + bbox.y + offset, g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 				break;
 			}
 			case 1: {
 				if (g_vars.get_as<bool>(V_ESP_ARMOR_ENABLED).value() && armor_val > m_armor_min)
 					offset += 5;
 
-				g_render.draw_string(Helpers::get_weapon_type_by_index(weapon->item_definition_index(), we_icon),
-					bbox.x + (bbox.w / 2), bbox.h + bbox.y + offset, g_render.get_font(Astriumwep12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+				g_font.draw_string(Helpers::get_weapon_type_by_index(weapon->item_definition_index(), we_icon),
+					bbox.x + (bbox.w / 2), bbox.h + bbox.y + offset, g_font.get_font(Astriumwep12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 				break;
 			}
 			}
@@ -474,8 +474,8 @@ void esp::player_rendering(c_base_player* entity)
 
 		auto fl_pos = 0;
 		for (const auto fl : flags) {
-			g_render.draw_string(fl.first, bbox.x + bbox.w + 3, bbox.y + fl_pos - 2,
-				g_render.get_font(Tahoma12px), TEXT_OUTLINE, fl.second);
+			g_font.draw_string(fl.first, bbox.x + bbox.w + 3, bbox.y + fl_pos - 2,
+				g_font.get_font(Tahoma12px), TEXT_OUTLINE, fl.second);
 
 			fl_pos += 10;
 		}
@@ -542,8 +542,8 @@ void esp::player_rendering(c_base_player* entity)
 
 			auto grenade_pos = 0;
 			for (const auto fl : grenade_flags) {
-				g_render.draw_string(fl.first, bbox.x + bbox.w + 3 + grenade_pos, bbox.y + bbox.h - 10,
-					g_render.get_font(Astriumwep16px), TEXT_OUTLINE, fl.second);
+				g_font.draw_string(fl.first, bbox.x + bbox.w + 3 + grenade_pos, bbox.y + bbox.h - 10,
+					g_font.get_font(Astriumwep16px), TEXT_OUTLINE, fl.second);
 
 				grenade_pos += 10;
 			}
@@ -552,8 +552,8 @@ void esp::player_rendering(c_base_player* entity)
 			for (const auto fl : inventory_item_flags) {
 				auto offset = grenade_flags.empty() ? 10 : 23;
 
-				g_render.draw_string(fl.first, bbox.x + bbox.w + 3 + inventory_item_pos, bbox.y + bbox.h - offset,
-					g_render.get_font(Astriumwep16px), TEXT_OUTLINE, fl.second);
+				g_font.draw_string(fl.first, bbox.x + bbox.w + 3 + inventory_item_pos, bbox.y + bbox.h - offset,
+					g_font.get_font(Astriumwep16px), TEXT_OUTLINE, fl.second);
 
 				inventory_item_pos += 18;
 			}

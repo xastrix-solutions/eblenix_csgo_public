@@ -3,14 +3,6 @@
 #include "globals.h"
 #include "interfaces.h"
 
-static std::vector<font_t> font_list = {
-	{ Tahoma12px,     12, "Tahoma",     FW_MEDIUM, ANTIALIASED_QUALITY },
-    { Verdana12px,    12, "Verdana",    FW_SEMIBOLD, ANTIALIASED_QUALITY },
-	{ Astriumwep12px, 12, "AstriumWep", FW_NORMAL, CLEARTYPE_QUALITY },
-	{ Astriumwep16px, 16, "AstriumWep", FW_NORMAL, CLEARTYPE_QUALITY },
-	{ Astriumwep25px, 25, "AstriumWep", FW_NORMAL, CLEARTYPE_QUALITY },
-};
-
 bool render_manager::init(IDirect3DDevice9* device)
 {
 	return create_objects(device);
@@ -30,21 +22,6 @@ bool render_manager::create_objects(IDirect3DDevice9* device)
 
 	if (FAILED(D3DXCreateLine(m_device, &m_line)))
 		return false;
-
-	for (const auto& font : font_list)
-	{
-		if (FAILED(D3DXCreateFontA(
-			m_device,
-			font.m_px, 0,
-			font.m_weight, 1, 0,
-			DEFAULT_CHARSET,
-			OUT_DEFAULT_PRECIS,
-			font.m_quality,
-			FF_DONTCARE,
-			font.m_name.c_str(),
-			&m_fonts[font.m_index])))
-			return false;
-	}
 
 	if (FAILED(m_device->CreateStateBlock(D3DSBT_ALL, &m_block)))
 		return false;
@@ -177,75 +154,16 @@ void render_manager::draw_corner_box(float x, float y, float w, float h, float c
 	draw_line(x + w, y + h, x + w, y + h - (h / cy), 1.0f, color);
 }
 
-void render_manager::draw_string(const std::string& string, float x, float y, ID3DXFont* font, uint8_t flags, color_t color)
-{
-	RECT r{ x, y, x, y };
-	RECT o_r{ x + 1, y + 1, x + 1, y + 1 };
-
-	if (flags & TEXT_CENTER_X) {
-		const auto half_width = static_cast<LONG>(get_text_width(string, font) / 2);
-
-		r = { static_cast<LONG>(x) - half_width, static_cast<LONG>(y), static_cast<LONG>(x) - half_width, static_cast<LONG>(y) };
-		o_r = { static_cast<LONG>(x) - half_width + 1, static_cast<LONG>(y) + 1, static_cast<LONG>(x) - half_width + 1, static_cast<LONG>(y) + 1 };
-	}
-
-	if (flags & TEXT_OUTLINE) {
-		font->DrawTextA(NULL, string.c_str(), -1, &o_r, DT_NOCLIP, color_t(0, 0, 0, color.get_alpha()).get());
-	}
-
-	font->DrawTextA(NULL, string.c_str(), -1, &r, DT_NOCLIP, color.get());
-}
-
-void render_manager::draw_stringW(const std::wstring& string, float x, float y, ID3DXFont* font, uint8_t flags, color_t color)
-{
-	RECT r{ x, y, x, y };
-	RECT o_r{ x + 1, y + 1, x + 1, y + 1 };
-
-	if (flags & TEXT_CENTER_X) {
-		const auto half_width = static_cast<LONG>(get_text_widthW(string, font) / 2);
-
-		r = { static_cast<LONG>(x) - half_width, static_cast<LONG>(y), static_cast<LONG>(x) - half_width, static_cast<LONG>(y) };
-		o_r = { static_cast<LONG>(x) - half_width + 1, static_cast<LONG>(y) + 1, static_cast<LONG>(x) - half_width + 1, static_cast<LONG>(y) + 1 };
-	}
-
-	if (flags & TEXT_OUTLINE) {
-		font->DrawTextW(NULL, string.c_str(), -1, &o_r, DT_NOCLIP, color_t(0, 0, 0, color.get_alpha()).get());
-	}
-
-	font->DrawTextW(NULL, string.c_str(), -1, &r, DT_NOCLIP, color.get());
-}
-
 void render_manager::draw_status(const std::string& string, color_t color)
 {
-	const auto string_font = get_font(Tahoma12px);
-	const auto string_width = get_text_width(string, string_font);
+	const auto string_font = g_font.get_font(Tahoma12px);
+	const auto string_width = g_font.get_text_width(string, string_font);
 
 	draw_filled_rect(GLOBAL(screen_width) - string_width - 15, 10, GLOBAL(screen_width), 17, color_t(0, 0, 0, 100));
 	draw_filled_rect(GLOBAL(screen_width) - string_width - 12, 13, 2, 11, color);
 
-	draw_string(string, GLOBAL(screen_width) - string_width - 5, 12,
+	g_font.draw_string(string, GLOBAL(screen_width) - string_width - 5, 12,
 		string_font, TEXT_OUTLINE, color_t(255, 255, 255));
-}
-
-float render_manager::get_text_width(const std::string& string, ID3DXFont* font)
-{
-	RECT r{};
-	font->DrawTextA(0, string.c_str(), -1, &r, DT_CALCRECT, 0xffffffff);
-
-	return (r.right - r.left);
-}
-
-float render_manager::get_text_widthW(const std::wstring& string, ID3DXFont* font)
-{
-	RECT r{};
-	font->DrawTextW(0, string.c_str(), -1, &r, DT_CALCRECT, 0xffffffff);
-
-	return (r.right - r.left);
-}
-
-ID3DXFont* render_manager::get_font(const _fonts index)
-{
-	return m_fonts[index];
 }
 
 void render_manager::undo()
@@ -253,14 +171,6 @@ void render_manager::undo()
 	if (m_line) {
 		m_line->Release();
 		m_line = nullptr;
-	}
-
-	for (const auto& font : font_list)
-	{
-		if (m_fonts[font.m_index]) {
-			m_fonts[font.m_index]->Release();
-			m_fonts[font.m_index] = nullptr;
-		}
 	}
 
 	if (m_block) {

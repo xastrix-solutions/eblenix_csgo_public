@@ -148,7 +148,7 @@ void visuals::run()
 
 void visuals::draw_status(const std::string& name, int x_offset)
 {
-	const auto string_width = g_render.get_text_width(name, g_render.get_font(Tahoma12px)) + x_offset;
+	const auto string_width = g_font.get_text_width(name, g_font.get_font(Tahoma12px)) + x_offset;
 	const auto ui_shadow_col = color_t(0, 0, 0, g_vars.get_as<int>(V_UI_COL_A).value());
 
 	g_render.draw_filled_rect(GLOBAL(screen_width) - string_width - 15, 10, GLOBAL(screen_width), 17, ui_shadow_col);
@@ -156,7 +156,7 @@ void visuals::draw_status(const std::string& name, int x_offset)
 	g_render.draw_filled_rect(GLOBAL(screen_width) - string_width - 12, 13, 2, 11,
 		GLOBAL(initialised) ? color_t(V_UI_COL) : color_t(164, 164, 164));
 
-	g_render.draw_string(name, GLOBAL(screen_width) - string_width - 5, 12, g_render.get_font(Tahoma12px), TEXT_OUTLINE, color_t(255, 255, 255));
+	g_font.draw_string(name, GLOBAL(screen_width) - string_width - 5, 12, g_font.get_font(Tahoma12px), TEXT_OUTLINE, color_t(255, 255, 255));
 
 	if (g_csgo.m_engine->is_connected())
 	{
@@ -173,14 +173,14 @@ void visuals::draw_status(const std::string& name, int x_offset)
 		g_render.draw_filled_rect(GLOBAL(screen_width) - string_width - 78, 13, 2, 11,
 			g_vars.get_as<bool>(V_AIMBOT_ENABLED).value() ? color_t(V_UI_COL) : color_t(164, 164, 164));
 
-		g_render.draw_string("E", GLOBAL(screen_width) - string_width - 30, 12,
-			g_render.get_font(Verdana12px), TEXT_OUTLINE, color_t(255, 255, 255));
+		g_font.draw_string("E", GLOBAL(screen_width) - string_width - 30, 12,
+			g_font.get_font(Verdana12px), TEXT_OUTLINE, color_t(255, 255, 255));
 
-		g_render.draw_string("T", GLOBAL(screen_width) - string_width - 52, 12,
-			g_render.get_font(Verdana12px), TEXT_OUTLINE, color_t(255, 255, 255));
+		g_font.draw_string("T", GLOBAL(screen_width) - string_width - 52, 12,
+			g_font.get_font(Verdana12px), TEXT_OUTLINE, color_t(255, 255, 255));
 
-		g_render.draw_string("A", GLOBAL(screen_width) - string_width - 74, 12,
-			g_render.get_font(Verdana12px), TEXT_OUTLINE, color_t(255, 255, 255));
+		g_font.draw_string("A", GLOBAL(screen_width) - string_width - 74, 12,
+			g_font.get_font(Verdana12px), TEXT_OUTLINE, color_t(255, 255, 255));
 	}
 }
 
@@ -196,8 +196,8 @@ void visuals::draw_spectators()
 
 	g_render.draw_filled_rect(GLOBAL(screen_width) - 102, Y + 3, 2, 12, color_t(V_UI_COL));
 
-	g_render.draw_string("Spectators", GLOBAL(screen_width) - 96, Y + 2,
-		g_render.get_font(Tahoma12px), TEXT_OUTLINE, color_t(255, 255, 255));
+	g_font.draw_string("Spectators", GLOBAL(screen_width) - 96, Y + 2,
+		g_font.get_font(Tahoma12px), TEXT_OUTLINE, color_t(255, 255, 255));
 
 	auto offset = 1;
 	for (int i = 1; i <= g_csgo.m_globals->max_clients; i++)
@@ -241,8 +241,8 @@ void visuals::draw_spectators()
 			player_name = player_name.substr(0, 14) + L"...";
 		}
 
-		g_render.draw_stringW(player_name, GLOBAL(screen_width) - 96, Y + 2 + (19 * offset),
-			g_render.get_font(Tahoma12px), TEXT_OUTLINE, color_t(255, 255, 255));
+		g_font.draw_stringW(player_name, GLOBAL(screen_width) - 96, Y + 2 + (19 * offset),
+			g_font.get_font(Tahoma12px), TEXT_OUTLINE, color_t(255, 255, 255));
 
 		offset++;
 	}
@@ -263,15 +263,15 @@ void visuals::draw_status_bomb_info(c_base_plantedc4* entity, const float explod
 	}
 	}
 
-	const auto string_width = g_render.get_text_width(bomb_info, g_render.get_font(Tahoma12px));
+	const auto string_width = g_font.get_text_width(bomb_info, g_font.get_font(Tahoma12px));
 
 	g_render.draw_filled_rect(GLOBAL(screen_width) - 175 - string_width, 10, string_width + 12, 17,
 		color_t(0, 0, 0, g_vars.get_as<int>(V_UI_COL_A).value()));
 
 	g_render.draw_filled_rect(GLOBAL(screen_width) - 172 - string_width, 13, 2, 11, color_t(V_UI_COL));
 
-	g_render.draw_string(bomb_info, GLOBAL(screen_width) - 167 - string_width, 12,
-		g_render.get_font(Tahoma12px), TEXT_OUTLINE, color_t(255, 255, 255));
+	g_font.draw_string(bomb_info, GLOBAL(screen_width) - 167 - string_width, 12,
+		g_font.get_font(Tahoma12px), TEXT_OUTLINE, color_t(255, 255, 255));
 }
 
 void visuals::draw_projectiles(c_base_entity* entity)
@@ -300,55 +300,55 @@ void visuals::draw_projectiles(c_base_entity* entity)
 	switch (g_vars.get_as<int>(V_VISUALS_WORLD_PROJECTLINES_TYPE).value()) {
 	case 0: {
 		if (studio_model_name.find("shbang") != std::string::npos) {
-			g_render.draw_string("Flash", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("Flash", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		else if (studio_model_name.find("kegrenade") != std::string::npos) {
-			g_render.draw_string("Smoke", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("Smoke", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		else if (studio_model_name.find("arygrenade") != std::string::npos) {
-			g_render.draw_string("Incendiary", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("Incendiary", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		else if (studio_model_name.find("olotov") != std::string::npos) {
-			g_render.draw_string("Molotov", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("Molotov", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		else if (studio_model_name.find("ggrenade") != std::string::npos) {
-			g_render.draw_string("He", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("He", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		else if (studio_model_name.find("ecoy") != std::string::npos) {
-			g_render.draw_string("Decoy", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("Decoy", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		break;
 	}
 	case 1: {
 		if (studio_model_name.find("shbang") != std::string::npos) {
-			g_render.draw_string("i", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("i", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		else if (studio_model_name.find("kegrenade") != std::string::npos) {
-			g_render.draw_string("k", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("k", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		else if (studio_model_name.find("arygrenade") != std::string::npos) {
-			g_render.draw_string("l", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("l", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		else if (studio_model_name.find("olotov") != std::string::npos) {
-			g_render.draw_string("n", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("n", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		else if (studio_model_name.find("ggrenade") != std::string::npos) {
-			g_render.draw_string("j", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("j", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 		else if (studio_model_name.find("ecoy") != std::string::npos) {
-			g_render.draw_string("m", projectlines.get_pos().x, projectlines.get_pos().y,
-				g_render.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string("m", projectlines.get_pos().x, projectlines.get_pos().y,
+				g_font.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 
 		y_dist_pos += 4;
@@ -361,8 +361,8 @@ void visuals::draw_projectiles(c_base_entity* entity)
 		char distance[256];
 		sprintf_s(distance, "%im", static_cast<int>(g_csgo.get_local()->get_vec_origin().distance_to(projectlines.get_origin())));
 
-		g_render.draw_string(distance, projectlines.get_pos().x, projectlines.get_pos().y + y_dist_pos,
-			g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+		g_font.draw_string(distance, projectlines.get_pos().x, projectlines.get_pos().y + y_dist_pos,
+			g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 	}
 }
 
@@ -382,13 +382,13 @@ void visuals::draw_entity_objects(c_base_entity* entity, std::vector<std::pair<s
 	{
 		if (entity_objects.in_class_id(obj.second))
 		{
-			g_render.draw_string(obj.first, entity_objects.get_pos().x, entity_objects.get_pos().y,
-				g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string(obj.first, entity_objects.get_pos().x, entity_objects.get_pos().y,
+				g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 
 			if (g_vars.get_as<bool>(V_VISUALS_WORLD_ITEMS_DISTANCE).value())
 			{
-				g_render.draw_string(distance, entity_objects.get_pos().x, entity_objects.get_pos().y + 10,
-					g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+				g_font.draw_string(distance, entity_objects.get_pos().x, entity_objects.get_pos().y + 10,
+					g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 			}
 		}
 	}
@@ -417,13 +417,13 @@ void visuals::draw_dropped_weapons(c_base_entity* entity)
 
 		switch (g_vars.get_as<int>(V_VISUALS_WORLD_WEAPONS_TYPE).value()) {
 		case 0: {
-			g_render.draw_string(Helpers::get_weapon_type_by_index(weapon->item_definition_index(), we_text), dropped_weapons.get_pos().x,
-				dropped_weapons.get_pos().y, g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string(Helpers::get_weapon_type_by_index(weapon->item_definition_index(), we_text), dropped_weapons.get_pos().x,
+				dropped_weapons.get_pos().y, g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 			break;
 		}
 		case 1: {
-			g_render.draw_string(Helpers::get_weapon_type_by_index(weapon->item_definition_index(), we_icon), dropped_weapons.get_pos().x,
-				dropped_weapons.get_pos().y, g_render.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string(Helpers::get_weapon_type_by_index(weapon->item_definition_index(), we_icon), dropped_weapons.get_pos().x,
+				dropped_weapons.get_pos().y, g_font.get_font(Astriumwep16px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 
 			y_ammo_bar_pos += 4;
 			y_dist_pos += 5;
@@ -449,8 +449,8 @@ void visuals::draw_dropped_weapons(c_base_entity* entity)
 			char distance[256];
 			sprintf_s(distance, "%im", static_cast<int>(g_csgo.get_local()->get_vec_origin().distance_to(dropped_weapons.get_origin())));
 
-			g_render.draw_string(distance, dropped_weapons.get_pos().x, dropped_weapons.get_pos().y + y_dist_pos,
-				g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+			g_font.draw_string(distance, dropped_weapons.get_pos().x, dropped_weapons.get_pos().y + y_dist_pos,
+				g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		}
 	}
 }
@@ -469,13 +469,13 @@ void visuals::draw_planted_bomb(c_base_plantedc4* entity, const float explode_ti
 
 	switch (g_vars.get_as<int>(V_VISUALS_WORLD_C4_TYPE).value()) {
 	case 0: {
-		g_render.draw_string("C4", planted_bomb.get_pos().x, planted_bomb.get_pos().y,
-			g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+		g_font.draw_string("C4", planted_bomb.get_pos().x, planted_bomb.get_pos().y,
+			g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 		break;
 	}
 	case 1: {
-		g_render.draw_string("o", planted_bomb.get_pos().x, planted_bomb.get_pos().y,
-			g_render.get_font(Astriumwep25px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+		g_font.draw_string("o", planted_bomb.get_pos().x, planted_bomb.get_pos().y,
+			g_font.get_font(Astriumwep25px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 
 		time_bar_offset += 9;
 		defuse_bar_offset += 9;
@@ -504,7 +504,7 @@ void visuals::draw_planted_bomb(c_base_plantedc4* entity, const float explode_ti
 		{
 			if (adjust_damage > g_csgo.get_local()->get_health() || adjust_damage == 100)
 			{
-				g_render.draw_string("Dead", planted_bomb.get_pos().x, planted_bomb.get_pos().y - 12, g_render.get_font(Tahoma12px),
+				g_font.draw_string("Dead", planted_bomb.get_pos().x, planted_bomb.get_pos().y - 12, g_font.get_font(Tahoma12px),
 					TEXT_OUTLINE | TEXT_CENTER_X, color_t(245, 92, 108, 255));
 			}
 			else
@@ -512,7 +512,7 @@ void visuals::draw_planted_bomb(c_base_plantedc4* entity, const float explode_ti
 				char buf[256];
 				sprintf_s(buf, "-%i HP", adjust_damage);
 
-				g_render.draw_string(buf, planted_bomb.get_pos().x, planted_bomb.get_pos().y - 12, g_render.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
+				g_font.draw_string(buf, planted_bomb.get_pos().x, planted_bomb.get_pos().y - 12, g_font.get_font(Tahoma12px), TEXT_OUTLINE | TEXT_CENTER_X, col);
 			}
 		}
 	}

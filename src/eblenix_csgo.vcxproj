@@ -105,6 +105,7 @@
     <ClCompile Include="..\external\minhook\src\hook.c" />
     <ClCompile Include="..\external\minhook\src\trampoline.c" />
     <ClCompile Include="event_manager.cpp" />
+    <ClCompile Include="fonts.cpp" />
     <ClCompile Include="math.cpp" />
     <ClCompile Include="netvar_manager.cpp" />
     <ClCompile Include="game_event_mgr.cpp" />
@@ -133,7 +134,6 @@
     <ClCompile Include="knifebot.cpp" />
     <ClCompile Include="triggerbot.cpp" />
     <ClCompile Include="visuals.cpp" />
-    <ClCompile Include="font_manager.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="hooks.cpp" />
     <ClCompile Include="input_manager.cpp" />
@@ -153,8 +153,10 @@
     <ClInclude Include="..\external\minhook\src\hde\table32.h" />
     <ClInclude Include="..\external\minhook\src\hde\table64.h" />
     <ClInclude Include="..\external\minhook\src\trampoline.h" />
+    <ClInclude Include="color.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="event_manager.h" />
+    <ClInclude Include="fonts.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="vars_def.h" />
@@ -198,7 +200,6 @@
     <ClInclude Include="knifebot.h" />
     <ClInclude Include="triggerbot.h" />
     <ClInclude Include="visuals.h" />
-    <ClInclude Include="font_manager.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="hooks.h" />
     <ClInclude Include="input_manager.h" />

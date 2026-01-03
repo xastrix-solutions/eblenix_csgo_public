@@ -31,9 +31,6 @@
     <ClCompile Include="interfaces.cpp">
       <Filter>csgo\interfaces</Filter>
     </ClCompile>
-    <ClCompile Include="font_manager.cpp">
-      <Filter>managers\font_manager</Filter>
-    </ClCompile>
     <ClCompile Include="render_manager.cpp">
       <Filter>managers\render_manager</Filter>
     </ClCompile>
@@ -133,6 +130,9 @@
     <ClCompile Include="event_manager.cpp">
       <Filter>managers\event_manager</Filter>
     </ClCompile>
+    <ClCompile Include="fonts.cpp">
+      <Filter>managers\render_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="netvar_manager.h">
@@ -179,9 +179,6 @@
     </ClInclude>
     <ClInclude Include="fnv.h">
       <Filter>csgo\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="font_manager.h">
-      <Filter>managers\font_manager</Filter>
     </ClInclude>
     <ClInclude Include="render_manager.h">
       <Filter>managers\render_manager</Filter>
@@ -330,6 +327,12 @@
     <ClInclude Include="vec4.h">
       <Filter>csgo\math</Filter>
     </ClInclude>
+    <ClInclude Include="fonts.h">
+      <Filter>managers\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="color.h">
+      <Filter>managers\render_manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="csgo">
@@ -400,9 +403,6 @@
     </Filter>
     <Filter Include="managers">
       <UniqueIdentifier>{f2917bf1-8bf6-4637-a71b-efd251526832}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="managers\font_manager">
-      <UniqueIdentifier>{cd1fef97-2569-47d3-8010-5bcc2ae32645}</UniqueIdentifier>
     </Filter>
     <Filter Include="managers\render_manager">
       <UniqueIdentifier>{933782b7-53e4-460b-a578-9803f459634a}</UniqueIdentifier>

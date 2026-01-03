@@ -1030,10 +1030,10 @@ void ui::draw(int x, int y)
 		char ss[256];
 		sprintf_s(ss, "%.2f", value);
 
-		const auto font = g_render.get_font(Tahoma12px);
-		const auto string_width = g_render.get_text_width(ss, font);
+		const auto font = g_font.get_font(Tahoma12px);
+		const auto string_width = g_font.get_text_width(ss, font);
 
-		g_render.draw_string(ss, x - string_width - 20, y - 11, font, TEXT_OUTLINE, color);
+		g_font.draw_string(ss, x - string_width - 20, y - 11, font, TEXT_OUTLINE, color);
 	};
 
 	int idx{ 0 };
@@ -1057,21 +1057,21 @@ void ui::draw(int x, int y)
 	};
 
 	auto draw_int = [](int value, int x, int y, color_t color) {
-		const auto font = g_render.get_font(Tahoma12px);
-		const auto string_width = g_render.get_text_width(std::to_string(value), font);
+		const auto font = g_font.get_font(Tahoma12px);
+		const auto string_width = g_font.get_text_width(std::to_string(value), font);
 
-		g_render.draw_string(std::to_string(value), x - string_width - 20, y - 11, font, TEXT_OUTLINE, color);
+		g_font.draw_string(std::to_string(value), x - string_width - 20, y - 11, font, TEXT_OUTLINE, color);
 	};
 
 	auto draw_hotkey = [](int k, int x, int x_text, int y, int y_text, int h, bool hold, color_t color, color_t background_color) {
 		const auto kss = g_input.virtual_key_to_wstring(k);
 
-		const auto font = g_render.get_font(Tahoma12px);
-		const auto key_string_width = g_render.get_text_widthW(hold ? L"---" : kss, font);
+		const auto font = g_font.get_font(Tahoma12px);
+		const auto key_string_width = g_font.get_text_widthW(hold ? L"---" : kss, font);
 
 		g_render.draw_filled_rect(x - key_string_width - 47, y, 47 + key_string_width, h, background_color);
 
-		g_render.draw_stringW(hold ? L"---" : kss, x_text - key_string_width - 30,
+		g_font.draw_stringW(hold ? L"---" : kss, x_text - key_string_width - 30,
 			y_text - 11, font, TEXT_OUTLINE, color);
 	};
 
@@ -1079,10 +1079,10 @@ void ui::draw(int x, int y)
 		if (item.length() > 20)
 			item = item.substr(0, 20) + L"...";
 
-		const auto font = g_render.get_font(Tahoma12px);
-		const auto string_width = g_render.get_text_widthW(item, font);
+		const auto font = g_font.get_font(Tahoma12px);
+		const auto string_width = g_font.get_text_widthW(item, font);
 
-		g_render.draw_stringW(item, x - string_width - 20, y - 11, font, TEXT_OUTLINE, color);
+		g_font.draw_stringW(item, x - string_width - 20, y - 11, font, TEXT_OUTLINE, color);
 	};
 
 	m_colors[UI_MAIN_COL] = color_t(V_UI_COL);
@@ -1107,9 +1107,9 @@ void ui::draw(int x, int y)
 			g_render.draw_filled_rect(MenuBoxX, MenuBoxY, 2, HeadBoxHeight, m_colors[UI_MAIN_COL]);
 		}
 
-		g_render.draw_stringW(menu_entry[i].m_name, MenuTextX + 3, MenuTextY - 11, g_render.get_font(Tahoma12px), TEXT_OUTLINE, m_colors[UI_TEXT_COL]);
+		g_font.draw_stringW(menu_entry[i].m_name, MenuTextX + 3, MenuTextY - 11, g_font.get_font(Tahoma12px), TEXT_OUTLINE, m_colors[UI_TEXT_COL]);
 
-		g_render.draw_string("+", MenuTextX + HeadBoxWidth - 20, MenuTextY - 11, g_render.get_font(Tahoma12px),
+		g_font.draw_string("+", MenuTextX + HeadBoxWidth - 20, MenuTextY - 11, g_font.get_font(Tahoma12px),
 			TEXT_OUTLINE, (i == m_entry_position && s_opened[UI_SUB_POS]) ? m_colors[UI_MAIN_COL] : m_colors[UI_TEXT_COL]);
 
 		y += HeadBoxHeight + 1;
@@ -1139,12 +1139,12 @@ void ui::draw(int x, int y)
 				g_render.draw_filled_rect(SubMenuBoxX, SubMenuBoxY, 2, HeadBoxHeight, m_colors[UI_MAIN_COL]);
 			}
 
-			g_render.draw_stringW(subm_entry[i].m_name, SubMenuTextX + 3, SubMenuTextY - 11,
-				g_render.get_font(Tahoma12px), TEXT_OUTLINE, m_colors[UI_TEXT_COL]);
+			g_font.draw_stringW(subm_entry[i].m_name, SubMenuTextX + 3, SubMenuTextY - 11,
+				g_font.get_font(Tahoma12px), TEXT_OUTLINE, m_colors[UI_TEXT_COL]);
 
 			if (subm_entry[i].m_state == UI_TAB_STATE)
 			{
-				g_render.draw_string("+", SubMenuTextX + HeadBoxWidth - 20, SubMenuTextY - 11, g_render.get_font(Tahoma12px),
+				g_font.draw_string("+", SubMenuTextX + HeadBoxWidth - 20, SubMenuTextY - 11, g_font.get_font(Tahoma12px),
 					TEXT_OUTLINE, (i == s_entry_position && s_opened[UI_SUB_SUB_POS]) ? m_colors[UI_MAIN_COL] : m_colors[UI_TEXT_COL]);
 			}
 			else
@@ -1212,11 +1212,11 @@ void ui::draw(int x, int y)
 				g_render.draw_filled_rect(SubSubMenuBoxX, SubSubMenuBoxY, 2, HeadBoxHeight, m_colors[UI_MAIN_COL]);
 			}
 
-			g_render.draw_stringW(ssubm_entry[i].m_name, SubSubMenuTextX + 3, SubSubMenuTextY - 11, g_render.get_font(Tahoma12px), TEXT_OUTLINE, m_colors[UI_TEXT_COL]);
+			g_font.draw_stringW(ssubm_entry[i].m_name, SubSubMenuTextX + 3, SubSubMenuTextY - 11, g_font.get_font(Tahoma12px), TEXT_OUTLINE, m_colors[UI_TEXT_COL]);
 
 			if (ssubm_entry[i].m_state == UI_TAB_STATE)
 			{
-				g_render.draw_string("+", SubSubMenuTextX + HeadBoxWidth - 20, SubSubMenuTextY - 11, g_render.get_font(Tahoma12px),
+				g_font.draw_string("+", SubSubMenuTextX + HeadBoxWidth - 20, SubSubMenuTextY - 11, g_font.get_font(Tahoma12px),
 					TEXT_OUTLINE, (i == ss_entry_position && s_opened[UI_SUB_SUB_SUB_POS]) ? m_colors[UI_MAIN_COL] : m_colors[UI_TEXT_COL]);
 			}
 			else
@@ -1282,7 +1282,7 @@ void ui::draw(int x, int y)
 				g_render.draw_filled_rect(SubSubSubMenuBoxX, SubSubSubMenuBoxY, 2, HeadBoxHeight, m_colors[UI_MAIN_COL]);
 			}
 
-			g_render.draw_stringW(sssubm_entry[i].m_name, SubSubSubMenuTextX + 3, SubSubSubMenuTextY - 11, g_render.get_font(Tahoma12px), TEXT_OUTLINE, m_colors[UI_TEXT_COL]);
+			g_font.draw_stringW(sssubm_entry[i].m_name, SubSubSubMenuTextX + 3, SubSubSubMenuTextY - 11, g_font.get_font(Tahoma12px), TEXT_OUTLINE, m_colors[UI_TEXT_COL]);
 
 			if (sssubm_entry[i].m_state != UI_FUNCTION_STATE)
 			{
