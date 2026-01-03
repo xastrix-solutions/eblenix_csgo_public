@@ -1037,22 +1037,21 @@ void ui::draw(int x, int y)
 	};
 
 	int idx{ 0 };
-	auto draw_bool = [&](bool value, int x, int y, color_t color) {
-		static std::vector<float> min_x{},
-                                  max_x{},
-                                  am{};
+	auto draw_bool = [&](bool value, int x, int y, color_t first, color_t second) {
+		static std::vector<float> min_x{}, max_x{}, anim_x{};
 
 		if (idx >= min_x.size()) {
 			min_x.resize(idx + 1, 38.0f);
 			max_x.resize(idx + 1, 25.0f);
-			am.resize(idx + 1, 37.0f);
+			anim_x.resize(idx + 1, 37.0f);
 		}
 
 		float switched_x = value ? max_x[idx] : min_x[idx];
-		am[idx] += (switched_x - am[idx]) * 0.1f;
+		anim_x[idx] += (switched_x - anim_x[idx]) * 0.1f;
 
 		g_render.draw_filled_rect(x - 38, y - 11, 26, 14, color_t(40, 40, 40));
-		g_render.draw_filled_rect(x - static_cast<int>(am[idx]), y - 10, 12, 12, color);
+		g_render.draw_filled_rect_fade(x - static_cast<int>(anim_x[idx]), y - 10, 12, 12,
+			GRADIENT_HORIZONTAL, value ? first : second, value ? second : first);
 
 		++idx;
 	};
@@ -1155,7 +1154,7 @@ void ui::draw(int x, int y)
 					if (subm_entry[i].m_state == UI_BOOL_STATE)
 					{
 						draw_bool(g_vars.get_as<bool>(subm_entry[i].m_var).value(),
-							SubMenuTextX + HeadBoxWidth, SubMenuTextY, m_colors[UI_PRIMARY_COL]);
+							SubMenuTextX + HeadBoxWidth, SubMenuTextY, m_colors[UI_PRIMARY_COL], m_colors[UI_MAIN_COL]);
 					}
 					else if (subm_entry[i].m_state == UI_INT_STATE)
 					{
@@ -1227,7 +1226,7 @@ void ui::draw(int x, int y)
 					if (ssubm_entry[i].m_state == UI_BOOL_STATE)
 					{
 						draw_bool(g_vars.get_as<bool>(ssubm_entry[i].m_var).value(),
-							SubSubMenuTextX + HeadBoxWidth, SubSubMenuTextY, m_colors[UI_PRIMARY_COL]);
+							SubSubMenuTextX + HeadBoxWidth, SubSubMenuTextY, m_colors[UI_PRIMARY_COL], m_colors[UI_MAIN_COL]);
 					}
 					else if (ssubm_entry[i].m_state == UI_INT_STATE)
 					{
@@ -1290,7 +1289,7 @@ void ui::draw(int x, int y)
 				if (sssubm_entry[i].m_state == UI_BOOL_STATE)
 				{
 					draw_bool(g_vars.get_as<bool>(sssubm_entry[i].m_var).value(),
-						SubSubSubMenuTextX + HeadBoxWidth, SubSubSubMenuTextY, m_colors[UI_PRIMARY_COL]);
+						SubSubSubMenuTextX + HeadBoxWidth, SubSubSubMenuTextY, m_colors[UI_PRIMARY_COL], m_colors[UI_MAIN_COL]);
 				}
 				else if (sssubm_entry[i].m_state == UI_INT_STATE)
 				{

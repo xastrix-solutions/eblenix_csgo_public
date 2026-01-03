@@ -132,8 +132,30 @@ void render_manager::draw_filled_rect(float x, float y, float w, float h, color_
 		{ x, y + h, 0.0f, 1.0f, color.get() },
 		{ x, y, 0.0f, 1.0f, color.get() },
 		{ x + w, y + h, 0.0f, 1.0f, color.get() },
-		{ x + w, y , 0.0f, 1.0f, color.get() }
+		{ x + w, y, 0.0f, 1.0f, color.get() }
 	};
+
+	m_device->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, true);
+	m_device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(vertex_t));
+	m_device->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, false);
+}
+
+void render_manager::draw_filled_rect_fade(float x, float y, float w, float h, uint8_t flags, color_t first, color_t second)
+{
+	vertex_t v[4]{};
+
+	v[0] = { x, y + h, 0.0f, 1.0f, first.get() };
+	v[1] = { x, y, 0.0f, 1.0f, first.get() };
+	v[2] = { x + w, y + h, 0.0f, 1.0f, second.get() };
+	v[3] = { x + w, y, 0.0f, 1.0f, second.get() };
+
+	if (flags & GRADIENT_VERTICAL)
+	{
+		v[0] = { x, y + h, 0.0f, 1.0f, second.get() };
+		v[1] = { x, y, 0.0f, 1.0f, first.get() };
+		v[2] = { x + w, y + h, 0.0f, 1.0f, second.get() };
+		v[3] = { x + w, y, 0.0f, 1.0f, first.get() };
+	}
 
 	m_device->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, true);
 	m_device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(vertex_t));
