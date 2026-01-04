@@ -50,7 +50,7 @@ void sprite_manager::on_reset_end()
 	m_sprite->OnResetDevice();
 }
 
-void sprite_manager::draw(int x, int y)
+void sprite_manager::draw(int x, int y, color_t color)
 {
 	if (!m_device || !m_texture || !m_sprite)
 		return;
@@ -59,7 +59,7 @@ void sprite_manager::draw(int x, int y)
 	D3DXMatrixTranslation(&matrix, static_cast<float>(x), static_cast<float>(y), 0.0f);
 
 	m_sprite->SetTransform(&matrix);
-	m_sprite->Draw(m_texture, 0, 0, 0, color_t(255, 255, 255).get());
+	m_sprite->Draw(m_texture, 0, 0, 0, color.get());
 }
 
 int sprite_manager::get_width()

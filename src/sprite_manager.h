@@ -11,7 +11,7 @@ struct sprite_manager {
 	void on_reset();
 	void on_reset_end();
 
-	void draw(int x, int y);
+	void draw(int x, int y, color_t color);
 
 	int get_width();
 	int get_height();

@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "config_manager.h"
 #include "input_manager.h"
+#include "interfaces.h"
 
 #include "sprites.hpp"
 
@@ -13,26 +14,44 @@ void ui::init(IDirect3DDevice9* device)
 
 void ui::run()
 {
-	if (!m_opened)
-		return;
+	float old_progress{};
+	calc_animation_progress(8.5f, g_csgo.m_globals->frame_time, old_progress);
 
-	setup();
+	m_colors[UI_MAIN_COL] = color_t(V_UI_COL,
+		static_cast<int>(target_animation_progress * 255.0f));
 
-	for (int i = UI_SPRITE_NONE; i < maxUISprites; i++) {
-		if (i == UI_SPRITE_NONE)
-			continue;
+	m_colors[UI_PRIMARY_COL] = color_t(V_UI_COL,
+		static_cast<int>(target_animation_progress * 130.0f));
 
-		m_sprites[i].begin();
+	m_colors[UI_SHADOW_COL] = color_t(20, 20, 20,
+		static_cast<int>(target_animation_progress * g_vars.get_as<int>(V_UI_COL_A).value()));
+
+	m_colors[UI_TEXT_COL] = color_t(253, 253, 253,
+		static_cast<int>(target_animation_progress * 255.0f));
+
+	if (target_animation_progress > 0.0f)
+	{
+		clear();
+		setup();
+
+		for (int i = UI_SPRITE_NONE; i < maxUISprites; i++) {
+			if (i == UI_SPRITE_NONE)
+				continue;
+
+			m_sprites[i].begin();
+		}
+
+		draw(g_vars.get_as<int>(V_UI_POS_X).value(), g_vars.get_as<int>(V_UI_POS_Y).value());
+
+		for (int i = UI_SPRITE_NONE; i < maxUISprites; i++) {
+			if (i == UI_SPRITE_NONE)
+				continue;
+
+			m_sprites[i].end();
+		}
 	}
 
-	draw(g_vars.get_as<int>(V_UI_POS_X).value(), g_vars.get_as<int>(V_UI_POS_Y).value());
-
-	for (int i = UI_SPRITE_NONE; i < maxUISprites; i++) {
-		if (i == UI_SPRITE_NONE)
-			continue;
-
-		m_sprites[i].end();
-	}
+	current_animation_progress = old_progress;
 }
 
 void ui::on_reset_sprites()
@@ -59,8 +78,6 @@ void ui::on_reset_end_sprites()
 
 void ui::setup()
 {
-	clear();
-
 	add(L"Aim");
 	add(L"Trigger");
 	add(L"Esp");
@@ -459,6 +476,10 @@ void ui::setup()
 			add_sub_int(L"Menu B", V_UI_COL_B, 0, 255, 1, true);
 
 			add_sub_int(L"Menu A", V_UI_COL_A, 70, 170, 1);
+		});
+
+		add_function(L"Unload", []() {
+			g::Unload();
 		});
 	});
 
@@ -988,6 +1009,27 @@ void ui::handle_input(unsigned int k)
 	}
 }
 
+void ui::calc_animation_progress(float anim_time, float delta_time, float& old_alpha)
+{
+	if (m_opened)
+	{
+		target_animation_progress += anim_time * delta_time;
+
+		if (target_animation_progress > 1.0f)
+			target_animation_progress = 1.0f;
+	}
+	else
+	{
+		target_animation_progress -= anim_time * delta_time;
+
+		if (target_animation_progress < 0.0f)
+			target_animation_progress = 0.0f;
+	}
+
+	old_alpha = current_animation_progress;
+	current_animation_progress = target_animation_progress;
+}
+
 void ui::draw(int x, int y)
 {
 	int HeadBoxWidth = 178;
@@ -1065,12 +1107,8 @@ void ui::draw(int x, int y)
 		g_font.draw_stringW(item, x - string_width - 20, y - 11, font, TEXT_OUTLINE, color);
 	};
 
-	m_colors[UI_MAIN_COL] = color_t(V_UI_COL);
-	m_colors[UI_PRIMARY_COL] = color_t(V_UI_COL, 130);
-	m_colors[UI_SHADOW_COL] = color_t(20, 20, 20, g_vars.get_as<int>(V_UI_COL_A).value());
-	m_colors[UI_TEXT_COL] = color_t(253, 253, 253);
-
-	m_sprites[UI_SPRITE_LOGO].draw(MenuLogoX, MenuLogoY);
+	m_sprites[UI_SPRITE_LOGO].draw(MenuLogoX, MenuLogoY, color_t(255, 255, 255,
+		static_cast<int>(target_animation_progress * 255.0f)));
 
 	for (int i = 0; i < m_entry_size; i++)
 	{
@@ -1304,4 +1342,71 @@ void ui::draw(int x, int y)
 			}
 		}
 	}
+}
+
+void ui::clear()
+{
+	for (int i = 0; i < m_entry_size; i++) {
+		menu_entry[i].m_name.clear();
+		menu_entry[i].m_space = false;
+	}
+
+	for (int i = 0; i < s_entry_size; i++) {
+		subm_entry[i].m_name.clear();
+		subm_entry[i].m_var.clear();
+
+		subm_entry[i].m_int_min = 0;
+		subm_entry[i].m_int_max = 0;
+		subm_entry[i].m_int_step = 0;
+
+		subm_entry[i].m_float_min = 0.0f;
+		subm_entry[i].m_float_max = 0.0f;
+		subm_entry[i].m_float_step = 0.0f;
+
+		subm_entry[i].m_state = UI_NONE_STATE;
+
+		subm_entry[i].m_items.clear();
+		subm_entry[i].m_fn = []() {};
+	}
+
+	for (int i = 0; i < ss_entry_size; i++) {
+		ssubm_entry[i].m_name.clear();
+		ssubm_entry[i].m_var.clear();
+
+		ssubm_entry[i].m_int_min = 0;
+		ssubm_entry[i].m_int_max = 0;
+		ssubm_entry[i].m_int_step = 0;
+
+		ssubm_entry[i].m_float_min = 0.0f;
+		ssubm_entry[i].m_float_max = 0.0f;
+		ssubm_entry[i].m_float_step = 0.0f;
+
+		ssubm_entry[i].m_state = UI_NONE_STATE;
+
+		ssubm_entry[i].m_items.clear();
+		ssubm_entry[i].m_fn = []() {};
+	}
+
+	for (int i = 0; i < sss_entry_size; i++) {
+		sssubm_entry[i].m_name.clear();
+		sssubm_entry[i].m_var.clear();
+
+		sssubm_entry[i].m_int_min = 0;
+		sssubm_entry[i].m_int_max = 0;
+		sssubm_entry[i].m_int_step = 0;
+
+		sssubm_entry[i].m_float_min = 0.0f;
+		sssubm_entry[i].m_float_max = 0.0f;
+		sssubm_entry[i].m_float_step = 0.0f;
+
+		sssubm_entry[i].m_state = UI_NONE_STATE;
+
+		sssubm_entry[i].m_items.clear();
+		sssubm_entry[i].m_fn = []() {};
+	}
+
+	m_entry_size = 0;
+	s_entry_size = 0;
+	ss_entry_size = 0;
+	sss_entry_size = 0;
 }

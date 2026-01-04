@@ -431,74 +431,11 @@ private:
 		if (pos == index) fn();
 	}
 
+	void calc_animation_progress(float anim_time, float delta_time, float& old_alpha);
 	void draw(int x, int y);
 	void setup();
+	void clear();
 
-	void clear() {
-		for (int i = 0; i < m_entry_size; i++) {
-			menu_entry[i].m_name.clear();
-			menu_entry[i].m_space = false;
-		}
-
-		for (int i = 0; i < s_entry_size; i++) {
-			subm_entry[i].m_name.clear();
-			subm_entry[i].m_var.clear();
-
-			subm_entry[i].m_int_min = 0;
-			subm_entry[i].m_int_max = 0;
-			subm_entry[i].m_int_step = 0;
-
-			subm_entry[i].m_float_min = 0.0f;
-			subm_entry[i].m_float_max = 0.0f;
-			subm_entry[i].m_float_step = 0.0f;
-
-			subm_entry[i].m_state = UI_NONE_STATE;
-
-			subm_entry[i].m_items.clear();
-			subm_entry[i].m_fn = []() {};
-		}
-
-		for (int i = 0; i < ss_entry_size; i++) {
-			ssubm_entry[i].m_name.clear();
-			ssubm_entry[i].m_var.clear();
-
-			ssubm_entry[i].m_int_min = 0;
-			ssubm_entry[i].m_int_max = 0;
-			ssubm_entry[i].m_int_step = 0;
-
-			ssubm_entry[i].m_float_min = 0.0f;
-			ssubm_entry[i].m_float_max = 0.0f;
-			ssubm_entry[i].m_float_step = 0.0f;
-
-			ssubm_entry[i].m_state = UI_NONE_STATE;
-
-			ssubm_entry[i].m_items.clear();
-			ssubm_entry[i].m_fn = []() {};
-		}
-
-		for (int i = 0; i < sss_entry_size; i++) {
-			sssubm_entry[i].m_name.clear();
-			sssubm_entry[i].m_var.clear();
-
-			sssubm_entry[i].m_int_min = 0;
-			sssubm_entry[i].m_int_max = 0;
-			sssubm_entry[i].m_int_step = 0;
-
-			sssubm_entry[i].m_float_min = 0.0f;
-			sssubm_entry[i].m_float_max = 0.0f;
-			sssubm_entry[i].m_float_step = 0.0f;
-
-			sssubm_entry[i].m_state = UI_NONE_STATE;
-
-			sssubm_entry[i].m_items.clear();
-			sssubm_entry[i].m_fn = []() {};
-		}
-
-		m_entry_size = 0;
-		s_entry_size = 0;
-		ss_entry_size = 0;
-		sss_entry_size = 0;
-	}
 private:
 	bool m_opened{},
 	     s_opened[maxUISubs]{};
@@ -511,6 +448,9 @@ private:
 		ss_entry_size{},
 		sss_entry_position{},
 		sss_entry_size{};
+
+	float current_animation_progress{},
+		  target_animation_progress{};
 
 	m_entry menu_entry[10]{};
 	s_entry subm_entry[16]{},

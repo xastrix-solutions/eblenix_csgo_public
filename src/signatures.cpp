@@ -79,7 +79,7 @@ sig_t sig::scan_sig(const std::string& module_name, const std::string& signature
 	for (int i = 0; i < module_size - pattern_size; i++) {
 		auto found = true;
 
-		for (auto j = 0; j < pattern_size; ++j) {
+		for (int j = 0; j < pattern_size; j++) {
 			if (base[i + j] != pattern_data[j] && pattern_data[j] != -1) {
 				found = false;
 				break;
@@ -89,10 +89,6 @@ sig_t sig::scan_sig(const std::string& module_name, const std::string& signature
 		if (found)
 			return &base[i];
 	}
-
-#ifdef _DEBUG
-	printf("Wrong signature: %s\n", signature.c_str());
-#endif
 
 	return {};
 }
