@@ -575,6 +575,12 @@ static void __stdcall draw_set_color_h(int r, int g, int b, int a)
 							if (!entity || entity->get_dormant() || !entity->is_life_state() || entity == g_csgo.get_local())
 								continue;
 
+							if ((entity->get_team_num() == g_csgo.get_local()->get_team_num()) & !g_vars.get_as<bool>(V_ESP_TEAM).value())
+								continue;
+
+							if (!g_csgo.get_local()->can_see_entity(entity->get_eye_pos()) & g_vars.get_as<bool>(V_ESP_VISIBLE_ONLY).value())
+								continue;
+
 							vec2 center{ static_cast<float>(GLOBAL(screen_width)) / 2, static_cast<float>(GLOBAL(screen_height)) / 2 };
 							box bbox{ g_esp.get_player_bbox(entity) };
 
