@@ -41,7 +41,6 @@ void aimbot::run(i_user_cmd* cmd)
 	if (Helpers::is_weapon_switching(weapon))
 		return;
 	
-	m_state = static_cast<_aim_state>(g_vars.get_as<bool>(V_AIMBOT_ALL_WEAPONS).value());
 	set_weapon_param(weapon);
 
 	if (const auto target = Helpers::find_target_entity(cmd, m_aim_fov, m_angle))
@@ -71,328 +70,148 @@ void aimbot::set_weapon_param(c_base_weapon* weapon)
 {
 	if (Helpers::is_pistol(weapon))
 	{
-		switch (m_state) {
-		case as_none: {
-			switch (g_vars.get_as<int>(V_AIMBOT_BONE_PISTOL).value()) {
-			case 0: {
-				m_hitbox_id = hitbox_head;
-				break;
-			}
-			case 1: {
-				m_hitbox_id = hitbox_neck;
-				break;
-			}
-			case 2: {
-				m_hitbox_id = hitbox_chest;
-				break;
-			}
-			case 3: {
-				m_hitbox_id = hitbox_stomach;
-				break;
-			}
-			case 4: {
-				m_hitbox_id = hitbox_pelvis;
-				break;
-			}
-			}
-
-			m_aim_fov = g_vars.get_as<float>(V_AIMBOT_FOV_PISTOL).value();
-			m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_SMOOTH_PISTOL).value();
-			m_aim_type = g_vars.get_as<int>(V_AIMBOT_TYPE_PISTOL).value();
-
+		switch (g_vars.get_as<int>(V_AIMBOT_BONE_PISTOL).value()) {
+		case 0: {
+			m_hitbox_id = hitbox_head;
 			break;
 		}
-		case as_all_weapons: {
-			switch (g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_BONE).value()) {
-			case 0: {
-				m_hitbox_id = hitbox_head;
-				break;
-			}
-			case 1: {
-				m_hitbox_id = hitbox_neck;
-				break;
-			}
-			case 2: {
-				m_hitbox_id = hitbox_chest;
-				break;
-			}
-			case 3: {
-				m_hitbox_id = hitbox_stomach;
-				break;
-			}
-			case 4: {
-				m_hitbox_id = hitbox_pelvis;
-				break;
-			}
-			}
-
-			m_aim_fov = g_vars.get_as<float>(V_AIMBOT_ALL_WEAPONS_FOV).value();
-			m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_ALL_WEAPONS_SMOOTH).value();
-			m_aim_type = g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_TYPE).value();
-
+		case 1: {
+			m_hitbox_id = hitbox_neck;
+			break;
+		}
+		case 2: {
+			m_hitbox_id = hitbox_chest;
+			break;
+		}
+		case 3: {
+			m_hitbox_id = hitbox_stomach;
+			break;
+		}
+		case 4: {
+			m_hitbox_id = hitbox_pelvis;
 			break;
 		}
 		}
+
+		m_aim_fov = g_vars.get_as<float>(V_AIMBOT_FOV_PISTOL).value();
+		m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_SMOOTH_PISTOL).value();
+		m_aim_type = g_vars.get_as<int>(V_AIMBOT_TYPE_PISTOL).value();
 	}
 	else if (Helpers::is_rifle(weapon))
 	{
-		switch (m_state) {
-		case as_none: {
-			switch (g_vars.get_as<int>(V_AIMBOT_BONE_RIFLE).value()) {
-			case 0: {
-				m_hitbox_id = hitbox_head;
-				break;
-			}
-			case 1: {
-				m_hitbox_id = hitbox_neck;
-				break;
-			}
-			case 2: {
-				m_hitbox_id = hitbox_chest;
-				break;
-			}
-			case 3: {
-				m_hitbox_id = hitbox_stomach;
-				break;
-			}
-			case 4: {
-				m_hitbox_id = hitbox_pelvis;
-				break;
-			}
-			}
-
-			m_aim_fov = g_vars.get_as<float>(V_AIMBOT_FOV_RIFLE).value();
-			m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_SMOOTH_RIFLE).value();
-			m_aim_type = g_vars.get_as<int>(V_AIMBOT_TYPE_RIFLE).value();
-
+		switch (g_vars.get_as<int>(V_AIMBOT_BONE_RIFLE).value()) {
+		case 0: {
+			m_hitbox_id = hitbox_head;
 			break;
 		}
-		case as_all_weapons: {
-			switch (g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_BONE).value()) {
-			case 0: {
-				m_hitbox_id = hitbox_head;
-				break;
-			}
-			case 1: {
-				m_hitbox_id = hitbox_neck;
-				break;
-			}
-			case 2: {
-				m_hitbox_id = hitbox_chest;
-				break;
-			}
-			case 3: {
-				m_hitbox_id = hitbox_stomach;
-				break;
-			}
-			case 4: {
-				m_hitbox_id = hitbox_pelvis;
-				break;
-			}
-			}
-
-			m_aim_fov = g_vars.get_as<float>(V_AIMBOT_ALL_WEAPONS_FOV).value();
-			m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_ALL_WEAPONS_SMOOTH).value();
-			m_aim_type = g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_TYPE).value();
-
+		case 1: {
+			m_hitbox_id = hitbox_neck;
+			break;
+		}
+		case 2: {
+			m_hitbox_id = hitbox_chest;
+			break;
+		}
+		case 3: {
+			m_hitbox_id = hitbox_stomach;
+			break;
+		}
+		case 4: {
+			m_hitbox_id = hitbox_pelvis;
 			break;
 		}
 		}
+
+		m_aim_fov = g_vars.get_as<float>(V_AIMBOT_FOV_RIFLE).value();
+		m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_SMOOTH_RIFLE).value();
+		m_aim_type = g_vars.get_as<int>(V_AIMBOT_TYPE_RIFLE).value();
 	}
 	else if (Helpers::is_sniper(weapon))
 	{
-		switch (m_state) {
-		case as_none: {
-			switch (g_vars.get_as<int>(V_AIMBOT_BONE_SNIPER).value()) {
-			case 0: {
-				m_hitbox_id = hitbox_head;
-				break;
-			}
-			case 1: {
-				m_hitbox_id = hitbox_neck;
-				break;
-			}
-			case 2: {
-				m_hitbox_id = hitbox_chest;
-				break;
-			}
-			case 3: {
-				m_hitbox_id = hitbox_stomach;
-				break;
-			}
-			case 4: {
-				m_hitbox_id = hitbox_pelvis;
-				break;
-			}
-			}
-
-			m_aim_fov = g_vars.get_as<float>(V_AIMBOT_FOV_SNIPER).value();
-			m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_SMOOTH_SNIPER).value();
-			m_aim_type = g_vars.get_as<int>(V_AIMBOT_TYPE_SNIPER).value();
-
+		switch (g_vars.get_as<int>(V_AIMBOT_BONE_SNIPER).value()) {
+		case 0: {
+			m_hitbox_id = hitbox_head;
 			break;
 		}
-		case as_all_weapons: {
-			switch (g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_BONE).value()) {
-			case 0: {
-				m_hitbox_id = hitbox_head;
-				break;
-			}
-			case 1: {
-				m_hitbox_id = hitbox_neck;
-				break;
-			}
-			case 2: {
-				m_hitbox_id = hitbox_chest;
-				break;
-			}
-			case 3: {
-				m_hitbox_id = hitbox_stomach;
-				break;
-			}
-			case 4: {
-				m_hitbox_id = hitbox_pelvis;
-				break;
-			}
-			}
-
-			m_aim_fov = g_vars.get_as<float>(V_AIMBOT_ALL_WEAPONS_FOV).value();
-			m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_ALL_WEAPONS_SMOOTH).value();
-			m_aim_type = g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_TYPE).value();
-
+		case 1: {
+			m_hitbox_id = hitbox_neck;
+			break;
+		}
+		case 2: {
+			m_hitbox_id = hitbox_chest;
+			break;
+		}
+		case 3: {
+			m_hitbox_id = hitbox_stomach;
+			break;
+		}
+		case 4: {
+			m_hitbox_id = hitbox_pelvis;
 			break;
 		}
 		}
+
+		m_aim_fov = g_vars.get_as<float>(V_AIMBOT_FOV_SNIPER).value();
+		m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_SMOOTH_SNIPER).value();
+		m_aim_type = g_vars.get_as<int>(V_AIMBOT_TYPE_SNIPER).value();
 	}
 	else if (Helpers::is_heavy(weapon))
 	{
-		switch (m_state) {
-		case as_none: {
-			switch (g_vars.get_as<int>(V_AIMBOT_BONE_HEAVY).value()) {
-			case 0: {
-				m_hitbox_id = hitbox_head;
-				break;
-			}
-			case 1: {
-				m_hitbox_id = hitbox_neck;
-				break;
-			}
-			case 2: {
-				m_hitbox_id = hitbox_chest;
-				break;
-			}
-			case 3: {
-				m_hitbox_id = hitbox_stomach;
-				break;
-			}
-			case 4: {
-				m_hitbox_id = hitbox_pelvis;
-				break;
-			}
-			}
-
-			m_aim_fov = g_vars.get_as<float>(V_AIMBOT_FOV_HEAVY).value();
-			m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_SMOOTH_HEAVY).value();
-			m_aim_type = g_vars.get_as<int>(V_AIMBOT_TYPE_HEAVY).value();
-
+		switch (g_vars.get_as<int>(V_AIMBOT_BONE_HEAVY).value()) {
+		case 0: {
+			m_hitbox_id = hitbox_head;
 			break;
 		}
-		case as_all_weapons: {
-			switch (g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_BONE).value()) {
-			case 0: {
-				m_hitbox_id = hitbox_head;
-				break;
-			}
-			case 1: {
-				m_hitbox_id = hitbox_neck;
-				break;
-			}
-			case 2: {
-				m_hitbox_id = hitbox_chest;
-				break;
-			}
-			case 3: {
-				m_hitbox_id = hitbox_stomach;
-				break;
-			}
-			case 4: {
-				m_hitbox_id = hitbox_pelvis;
-				break;
-			}
-			}
-
-			m_aim_fov = g_vars.get_as<float>(V_AIMBOT_ALL_WEAPONS_FOV).value();
-			m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_ALL_WEAPONS_SMOOTH).value();
-			m_aim_type = g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_TYPE).value();
-
+		case 1: {
+			m_hitbox_id = hitbox_neck;
+			break;
+		}
+		case 2: {
+			m_hitbox_id = hitbox_chest;
+			break;
+		}
+		case 3: {
+			m_hitbox_id = hitbox_stomach;
+			break;
+		}
+		case 4: {
+			m_hitbox_id = hitbox_pelvis;
 			break;
 		}
 		}
+
+		m_aim_fov = g_vars.get_as<float>(V_AIMBOT_FOV_HEAVY).value();
+		m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_SMOOTH_HEAVY).value();
+		m_aim_type = g_vars.get_as<int>(V_AIMBOT_TYPE_HEAVY).value();
 	}
 	else if (Helpers::is_smg(weapon))
 	{
-		switch (m_state) {
-		case as_none: {
-			switch (g_vars.get_as<int>(V_AIMBOT_BONE_SMG).value()) {
-			case 0: {
-				m_hitbox_id = hitbox_head;
-				break;
-			}
-			case 1: {
-				m_hitbox_id = hitbox_neck;
-				break;
-			}
-			case 2: {
-				m_hitbox_id = hitbox_chest;
-				break;
-			}
-			case 3: {
-				m_hitbox_id = hitbox_stomach;
-				break;
-			}
-			case 4: {
-				m_hitbox_id = hitbox_pelvis;
-				break;
-			}
-			}
-
-			m_aim_fov = g_vars.get_as<float>(V_AIMBOT_FOV_SMG).value();
-			m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_SMOOTH_SMG).value();
-			m_aim_type = g_vars.get_as<int>(V_AIMBOT_TYPE_SMG).value();
-
+		switch (g_vars.get_as<int>(V_AIMBOT_BONE_SMG).value()) {
+		case 0: {
+			m_hitbox_id = hitbox_head;
 			break;
 		}
-		case as_all_weapons: {
-			switch (g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_BONE).value()) {
-			case 0: {
-				m_hitbox_id = hitbox_head;
-				break;
-			}
-			case 1: {
-				m_hitbox_id = hitbox_neck;
-				break;
-			}
-			case 2: {
-				m_hitbox_id = hitbox_chest;
-				break;
-			}
-			case 3: {
-				m_hitbox_id = hitbox_stomach;
-				break;
-			}
-			case 4: {
-				m_hitbox_id = hitbox_pelvis;
-				break;
-			}
-			}
-
-			m_aim_fov = g_vars.get_as<float>(V_AIMBOT_ALL_WEAPONS_FOV).value();
-			m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_ALL_WEAPONS_SMOOTH).value();
-			m_aim_type = g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_TYPE).value();
-
+		case 1: {
+			m_hitbox_id = hitbox_neck;
+			break;
+		}
+		case 2: {
+			m_hitbox_id = hitbox_chest;
+			break;
+		}
+		case 3: {
+			m_hitbox_id = hitbox_stomach;
+			break;
+		}
+		case 4: {
+			m_hitbox_id = hitbox_pelvis;
 			break;
 		}
 		}
+
+		m_aim_fov = g_vars.get_as<float>(V_AIMBOT_FOV_SMG).value();
+		m_aim_smooth = g_vars.get_as<float>(V_AIMBOT_SMOOTH_SMG).value();
+		m_aim_type = g_vars.get_as<int>(V_AIMBOT_TYPE_SMG).value();
 	}
 }
 

@@ -17,12 +17,6 @@
 #define V_AIMBOT_JUMP_CHECK "aimbot->jump_check"
 #define V_AIMBOT_SCOPE_CHECK "aimbot->scope_check"
 
-#define V_AIMBOT_ALL_WEAPONS "aimbot->all"
-#define V_AIMBOT_ALL_WEAPONS_TYPE "aimbot->all->type"
-#define V_AIMBOT_ALL_WEAPONS_BONE "aimbot->all->bone"
-#define V_AIMBOT_ALL_WEAPONS_FOV "aimbot->all->fov"
-#define V_AIMBOT_ALL_WEAPONS_SMOOTH "aimbot->all->smooth"
-
 #define V_AIMBOT_TYPE_PISTOL "aimbot->type->pistol"
 #define V_AIMBOT_TYPE_RIFLE "aimbot->type->rifle"
 #define V_AIMBOT_TYPE_SNIPER "aimbot->type->sniper"

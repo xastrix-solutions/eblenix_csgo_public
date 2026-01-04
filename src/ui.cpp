@@ -90,78 +90,64 @@ void ui::setup()
 		add_tab(L"Knifes");
 
 		add_entry<AIMBOT_WEAPONS_TAB>(s_entry_position, [&]() {
-			add_sub_bool(L"All", V_AIMBOT_ALL_WEAPONS, true);
+			add_sub_tab(L"Pistols");
+			add_sub_tab(L"Rifles");
+			add_sub_tab(L"Snipers");
+			add_sub_tab(L"Heavies");
+			add_sub_tab(L"Smgs");
 
 			std::vector<std::wstring> m_hitboxes{ L"Head", L"Neck", L"Chest", L"Stomach", L"Pelvis" };
 			std::vector<std::wstring> m_types{ L"Hitbox", L"Nearest" };
 
-			if (g_vars.get_as<bool>(V_AIMBOT_ALL_WEAPONS).value()) {
-				add_sub_item(L"Type", V_AIMBOT_ALL_WEAPONS_TYPE, m_types, true);
+			add_entry<AIMBOT_WEAPONS_PISTOL_TAB>(ss_entry_position, [&]() {
+				add_sub_sub_item(L"Type", V_AIMBOT_TYPE_PISTOL, m_types, true);
 
-				if (g_vars.get_as<int>(V_AIMBOT_ALL_WEAPONS_TYPE).value() == 0)
-					add_sub_item(L"Hitbox", V_AIMBOT_ALL_WEAPONS_BONE, m_hitboxes, true);
+				if (g_vars.get_as<int>(V_AIMBOT_TYPE_PISTOL).value() == 0)
+					add_sub_sub_item(L"Hitbox", V_AIMBOT_BONE_PISTOL, m_hitboxes, true);
 
-				add_sub_float(L"Fov", V_AIMBOT_ALL_WEAPONS_FOV, 0.0f, 180.0f, 0.5f);
-				add_sub_float(L"Smooth", V_AIMBOT_ALL_WEAPONS_SMOOTH, 1.0f, 10.0f, 0.1f);
-			}
-			else
-			{
-				add_sub_tab(L"Pistols");
-				add_sub_tab(L"Rifles");
-				add_sub_tab(L"Snipers");
-				add_sub_tab(L"Heavies");
-				add_sub_tab(L"Smgs");
+				add_sub_sub_float(L"Fov", V_AIMBOT_FOV_PISTOL, 0.0f, 180.0f, 0.5f);
+				add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_PISTOL, 1.0f, 10.0f, 0.1f);
+			});
 
-				add_entry<AIMBOT_WEAPONS_PISTOL_TAB>(ss_entry_position, [&]() {
-					add_sub_sub_item(L"Type", V_AIMBOT_TYPE_PISTOL, m_types, true);
+			add_entry<AIMBOT_WEAPONS_RIFLE_TAB>(ss_entry_position, [&]() {
+				add_sub_sub_item(L"Type", V_AIMBOT_TYPE_RIFLE, m_types, true);
 
-					if (g_vars.get_as<int>(V_AIMBOT_TYPE_PISTOL).value() == 0)
-						add_sub_sub_item(L"Hitbox", V_AIMBOT_BONE_PISTOL, m_hitboxes, true);
+				if (g_vars.get_as<int>(V_AIMBOT_TYPE_RIFLE).value() == 0)
+					add_sub_sub_item(L"Hitbox", V_AIMBOT_BONE_RIFLE, m_hitboxes, true);
 
-					add_sub_sub_float(L"Fov", V_AIMBOT_FOV_PISTOL, 0.0f, 180.0f, 0.5f);
-					add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_PISTOL, 1.0f, 10.0f, 0.1f);
-				});
+				add_sub_sub_float(L"Fov", V_AIMBOT_FOV_RIFLE, 0.0f, 180.0f, 0.5f);
+				add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_RIFLE, 1.0f, 10.0f, 0.1f);
+			});
 
-				add_entry<AIMBOT_WEAPONS_RIFLE_TAB>(ss_entry_position, [&]() {
-					add_sub_sub_item(L"Type", V_AIMBOT_TYPE_RIFLE, m_types, true);
+			add_entry<AIMBOT_WEAPONS_SNIPER_TAB>(ss_entry_position, [&]() {
+				add_sub_sub_item(L"Type", V_AIMBOT_TYPE_SNIPER, m_types, true);
 
-					if (g_vars.get_as<int>(V_AIMBOT_TYPE_RIFLE).value() == 0)
-						add_sub_sub_item(L"Hitbox", V_AIMBOT_BONE_RIFLE, m_hitboxes, true);
+				if (g_vars.get_as<int>(V_AIMBOT_TYPE_SNIPER).value() == 0)
+					add_sub_sub_item(L"Hitbox", V_AIMBOT_BONE_SNIPER, m_hitboxes, true);
 
-					add_sub_sub_float(L"Fov", V_AIMBOT_FOV_RIFLE, 0.0f, 180.0f, 0.5f);
-					add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_RIFLE, 1.0f, 10.0f, 0.1f);
-				});
+				add_sub_sub_float(L"Fov", V_AIMBOT_FOV_SNIPER, 0.0f, 180.0f, 0.5f);
+				add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_SNIPER, 1.0f, 10.0f, 0.1f);
+			});
 
-				add_entry<AIMBOT_WEAPONS_SNIPER_TAB>(ss_entry_position, [&]() {
-					add_sub_sub_item(L"Type", V_AIMBOT_TYPE_SNIPER, m_types, true);
+			add_entry<AIMBOT_WEAPONS_HEAVY_TAB>(ss_entry_position, [&]() {
+				add_sub_sub_item(L"Type", V_AIMBOT_TYPE_HEAVY, m_types, true);
 
-					if (g_vars.get_as<int>(V_AIMBOT_TYPE_SNIPER).value() == 0)
-						add_sub_sub_item(L"Hitbox", V_AIMBOT_BONE_SNIPER, m_hitboxes, true);
+				if (g_vars.get_as<int>(V_AIMBOT_TYPE_HEAVY).value() == 0)
+					add_sub_sub_item(L"Hitbox", V_AIMBOT_BONE_HEAVY, m_hitboxes, true);
 
-					add_sub_sub_float(L"Fov", V_AIMBOT_FOV_SNIPER, 0.0f, 180.0f, 0.5f);
-					add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_SNIPER, 1.0f, 10.0f, 0.1f);
-				});
+				add_sub_sub_float(L"Fov", V_AIMBOT_FOV_HEAVY, 0.0f, 180.0f, 0.5f);
+				add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_HEAVY, 1.0f, 10.0f, 0.1f);
+			});
 
-				add_entry<AIMBOT_WEAPONS_HEAVY_TAB>(ss_entry_position, [&]() {
-					add_sub_sub_item(L"Type", V_AIMBOT_TYPE_HEAVY, m_types, true);
+			add_entry<AIMBOT_WEAPONS_SMG_TAB>(ss_entry_position, [&]() {
+				add_sub_sub_item(L"Type", V_AIMBOT_TYPE_SMG, m_types, true);
 
-					if (g_vars.get_as<int>(V_AIMBOT_TYPE_HEAVY).value() == 0)
-						add_sub_sub_item(L"Hitbox", V_AIMBOT_BONE_HEAVY, m_hitboxes, true);
+				if (g_vars.get_as<int>(V_AIMBOT_TYPE_SMG).value() == 0)
+					add_sub_sub_item(L"Hitbox", V_AIMBOT_BONE_SMG, m_hitboxes, true);
 
-					add_sub_sub_float(L"Fov", V_AIMBOT_FOV_HEAVY, 0.0f, 180.0f, 0.5f);
-					add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_HEAVY, 1.0f, 10.0f, 0.1f);
-				});
-
-				add_entry<AIMBOT_WEAPONS_SMG_TAB>(ss_entry_position, [&]() {
-					add_sub_sub_item(L"Type", V_AIMBOT_TYPE_SMG, m_types, true);
-
-					if (g_vars.get_as<int>(V_AIMBOT_TYPE_SMG).value() == 0)
-						add_sub_sub_item(L"Hitbox", V_AIMBOT_BONE_SMG, m_hitboxes, true);
-
-					add_sub_sub_float(L"Fov", V_AIMBOT_FOV_SMG, 0.0f, 180.0f, 0.5f);
-					add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_SMG, 1.0f, 10.0f, 0.1f);
-				});
-			}
+				add_sub_sub_float(L"Fov", V_AIMBOT_FOV_SMG, 0.0f, 180.0f, 0.5f);
+				add_sub_sub_float(L"Smooth", V_AIMBOT_SMOOTH_SMG, 1.0f, 10.0f, 0.1f);
+			});
 		});
 
 		add_entry<AIMBOT_KNIFE_TAB>(s_entry_position, [&]() {
