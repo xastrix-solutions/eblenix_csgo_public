@@ -112,6 +112,9 @@
     <ClCompile Include="render_view.cpp" />
     <ClCompile Include="surface.cpp" />
     <ClCompile Include="trace_ray.cpp" />
+    <ClCompile Include="ui_draw.cpp" />
+    <ClCompile Include="ui_entries.cpp" />
+    <ClCompile Include="ui_input.cpp" />
     <ClCompile Include="weapon_system.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="signatures.cpp" />

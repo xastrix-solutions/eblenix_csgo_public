@@ -136,6 +136,15 @@
     <ClCompile Include="surface.cpp">
       <Filter>csgo\vgui</Filter>
     </ClCompile>
+    <ClCompile Include="ui_entries.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_input.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_draw.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="netvar_manager.h">
