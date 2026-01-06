@@ -32,8 +32,24 @@ void movement::bunny_hop(i_user_cmd* cmd)
 		g_csgo.get_local()->get_move_type() == movetype_observer)
 		return;
 
-	if (cmd->buttons & in_jump && !(g_csgo.get_local()->get_flags() & fl_onground))
-		cmd->buttons &= ~in_jump;
+	static uint8_t u{};
+	if (!(u & 0x1) && (u & 0x2)) {
+		u &= ~0x2;
+		cmd->buttons |= in_jump;
+	}
+	else if (cmd->buttons & in_jump) {
+		if (g_csgo.get_local()->get_flags() & fl_onground) {
+			u |= 0x1;
+			u |= 0x2;
+		}
+		else {
+			cmd->buttons &= ~in_jump;
+			u &= ~0x1;
+		}
+	}
+	else {
+		u &= ~0x3;
+	}
 }
 
 void movement::infinite_duck(i_user_cmd* cmd)
