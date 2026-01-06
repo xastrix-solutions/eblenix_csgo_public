@@ -27,7 +27,7 @@ static unsigned long WINAPI wnd_proc(HWND h, UINT m, WPARAM w, LPARAM l)
 		{
 			if (!GLOBAL(console_opened) && !GLOBAL(chat_opened))
 			{
-				g_input.process_message(m, w);
+				g_input.process_message(m, w, l);
 			}
 		}
 	}
@@ -55,44 +55,61 @@ WNDPROC input_manager::get_wnd_proc()
 	return m_old_wnd_proc;
 }
 
-void input_manager::process_message(UINT m, WPARAM w)
+void input_manager::process_message(UINT m, WPARAM w, LPARAM l)
 {
 	process_keybd_message(m, w);
-
-	if (g_ui.get_menu_state() && g_vars.get_as<bool>(V_UI_MOUSE_WHEEL_NAVIGATION).value())
-		process_mouse_message(m, w);
+	process_mouse_message(m, w, l);
 }
 
-void input_manager::process_mouse_message(UINT m, WPARAM w)
+void input_manager::process_mouse_message(UINT m, WPARAM w, LPARAM l)
 {
+	auto menu_opened = g_ui.get_menu_state();
+	auto emul_key_for_wheel_navigation = [&](unsigned int k) {
+		if (!(menu_opened && g_vars.get_as<bool>(V_UI_MOUSE_WHEEL_NAVIGATION).value()))
+			return;
+
+		process_keybd_message(WM_KEYDOWN, k);
+		process_keybd_message(WM_KEYUP, k);
+	};
+
+	if (menu_opened) {
+		/* moving the ui by position x,y using the mouse */
+		auto ui_pos_x = g_vars.get_as<int>(V_UI_POS_X).value();
+		auto ui_pos_y = g_vars.get_as<int>(V_UI_POS_Y).value();
+
+		if (move_object(m, 180, 255, ui_pos_x, ui_pos_y)) {
+			g_vars.set(V_UI_POS_X, ui_pos_x);
+			g_vars.set(V_UI_POS_Y, ui_pos_y);
+		}
+	}
+
 	switch (m) {
+	case WM_MOUSEMOVE: {
+		m_mouse_pos_x = LOWORD(l);
+		m_mouse_pos_y = HIWORD(l);
+		break;
+	}
 	case WM_LBUTTONDOWN: {
-		process_keybd_message(WM_KEYDOWN, VK_LEFT);
-		process_keybd_message(WM_KEYUP, VK_LEFT);
+		emul_key_for_wheel_navigation(VK_LEFT);
 		break;
 	}
 	case WM_RBUTTONDOWN: {
-		process_keybd_message(WM_KEYDOWN, VK_RIGHT);
-		process_keybd_message(WM_KEYUP, VK_RIGHT);
+		emul_key_for_wheel_navigation(VK_RIGHT);
 		break;
 	}
 	case WM_MOUSEWHEEL: {
-		int wheel_accumulate{ 0 };
+		m_wheel_accumulate += GET_WHEEL_DELTA_WPARAM(w);
 
-		wheel_accumulate += GET_WHEEL_DELTA_WPARAM(w);
+		while (m_wheel_accumulate >= WHEEL_DELTA) {
+			m_wheel_accumulate -= WHEEL_DELTA;
 
-		while (wheel_accumulate >= WHEEL_DELTA) {
-			wheel_accumulate -= WHEEL_DELTA;
-
-			process_keybd_message(WM_KEYDOWN, VK_UP);
-			process_keybd_message(WM_KEYUP, VK_UP);
+			emul_key_for_wheel_navigation(VK_UP);
 		}
 
-		while (wheel_accumulate <= -WHEEL_DELTA) {
-			wheel_accumulate += WHEEL_DELTA;
+		while (m_wheel_accumulate <= -WHEEL_DELTA) {
+			m_wheel_accumulate += WHEEL_DELTA;
 
-			process_keybd_message(WM_KEYDOWN, VK_DOWN);
-			process_keybd_message(WM_KEYUP, VK_DOWN);
+			emul_key_for_wheel_navigation(VK_DOWN);
 		}
 		break;
 	}
