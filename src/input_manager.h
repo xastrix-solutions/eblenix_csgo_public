@@ -11,10 +11,6 @@ enum m_state {
 	state_pressed,
 };
 
-struct mouse_rect_t {
-	int w, h;
-};
-
 struct mouse_t {
 	friend struct input_manager;
 
